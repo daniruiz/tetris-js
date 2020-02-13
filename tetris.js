@@ -1,3 +1,6 @@
+/* eslint-disable comma-dangle */
+/* eslint-disable curly */
+
 'use strict'
 
 const BOARD_SIZE = {
@@ -52,14 +55,16 @@ class Tetris {
 
     this.board = new Array(BOARD_SIZE.y)
     for (let y = 0; y < BOARD_SIZE.y; y++)
-        this.board[y] = new Array(BOARD_SIZE.x)
+      this.board[y] = new Array(BOARD_SIZE.x)
 
     this._addNewPiece()
 
-    const timer = () => this._timer = setTimeout(() => {
-      this.movePieceDown()
-      timer()
-    }, 1000)
+    const timer = () => {
+      this._timer = setTimeout(() => {
+        this.movePieceDown()
+        timer()
+      }, 1000)
+    }
     timer()
   }
 
@@ -69,8 +74,7 @@ class Tetris {
   }
 
   movePieceDown () {
-    let addNewPiece = this._currentPiece.reduce((addNewPiece, block) => 
-      addNewPiece ||
+    const addNewPiece = this._currentPiece.reduce((addNewPiece, block) => addNewPiece ||
       block.y === 0 ||
       (!!this.board[block.y - 1][block.x] && !this.board[block.y - 1][block.x].currentPiece)
     , false)
@@ -82,7 +86,7 @@ class Tetris {
       else
         this._addNewPiece()
     } else {
-      this._currentPiece.forEach(block => this.board[block.y][block.x] = null)
+      this._currentPiece.forEach(block => { this.board[block.y][block.x] = null })
       this._currentPiece.forEach(block => {
         this.board[block.y - 1][block.x] = block
         block.y = block.y - 1
@@ -94,25 +98,22 @@ class Tetris {
   movePieceSide (side) {
     let xShift
     let hit
-    let currentPiece
     if (side === 'right') {
       xShift = +1
-      hit = this._currentPiece.reduce((hit, block) => 
-        hit ||
+      hit = this._currentPiece.reduce((hit, block) => hit ||
         block.x === BOARD_SIZE.x - 1 ||
         (!!this.board[block.y][block.x + xShift] && !this.board[block.y][block.x + xShift].currentPiece)
       , false)
     } else if (side === 'left') {
       xShift = -1
-      hit = this._currentPiece.reduce((hit, block) => 
-        hit ||
+      hit = this._currentPiece.reduce((hit, block) => hit ||
         block.x === 0 ||
         (!!this.board[block.y][block.x + xShift] && !this.board[block.y][block.x + xShift].currentPiece)
       , false)
     }
 
     if (!hit) {
-      this._currentPiece.forEach(block => this.board[block.y][block.x] = null)
+      this._currentPiece.forEach(block => { this.board[block.y][block.x] = null })
       this._currentPiece.forEach(block => {
         this.board[block.y][block.x + xShift] = block
         block.x = block.x + xShift
@@ -123,7 +124,6 @@ class Tetris {
 
   rotatePiece () {
     const piecePos = this._currentPiece.reduce((pos, block) => ({ x: Math.max(block.y, pos.y), y: Math.min(block.x, pos.y) }), { x: 0, y: BOARD_SIZE.y })
-    console.log(piecePos)
   }
 
   _addNewPiece () {
