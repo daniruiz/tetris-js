@@ -123,7 +123,41 @@ class Tetris {
   }
 
   rotatePiece () {
-    const piecePos = this._currentPiece.reduce((pos, block) => ({ x: Math.max(block.y, pos.y), y: Math.min(block.x, pos.y) }), { x: 0, y: BOARD_SIZE.y })
+    const piecePosition = this._currentPiece.reduce((pos, block) => ({
+      x: Math.min(block.x, pos.x),
+      y: Math.max(block.y, pos.y),
+    }), {
+      x: BOARD_SIZE.x,
+      y: 0,
+    })
+    const rotatedPieceProperties = this._currentPiece.reduce((properties, block) => ({
+      height: Math.max(properties.height, (block.x - piecePosition.x + 1)),
+      width: Math.max(properties.width, (piecePosition.y - block.y + 1)),
+    }), {
+      height: 0,
+      width: 0,
+    })
+    const xShift = Math.min(0, Math.max(-2, (BOARD_SIZE.x - 1) - (piecePosition.x + rotatedPieceProperties.width - 1))) // Move piece left if it hits the wall after rotation
+    const rotatedPiece = this._currentPiece.map(block => {
+      return Object.assign({ ...block }, {
+        x: piecePosition.y - block.y + piecePosition.x + Math.floor(rotatedPieceProperties.height / 2 - 1) + xShift,
+        y: block.x - piecePosition.x + piecePosition.y - (rotatedPieceProperties.height - 1),
+      })
+    })
+    const hit = rotatedPiece.reduce((hit, block) => hit ||
+        block.y < 0 ||
+        block.x > BOARD_SIZE.x - 1 ||
+        (!!this.board[block.y][block.x] && !this.board[block.y][block.x].currentPiece)
+    , false)
+
+    if (!hit) {
+      this._currentPiece.forEach(block => { this.board[block.y][block.x] = null })
+      this._currentPiece.forEach((block, i) => {
+        Object.assign(block, rotatedPiece[i])
+        this.board[block.y][block.x] = block
+      })
+      this._updateBoard()
+    }
   }
 
   _addNewPiece () {
