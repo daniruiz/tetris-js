@@ -89,12 +89,7 @@ class Tetris {
       else
         this._addNewPiece()
     } else {
-      this._currentPiece.forEach(block => { this.board[block.y][block.x] = null })
-      this._currentPiece.forEach(block => {
-        this.board[block.y - 1][block.x] = block
-        block.y = block.y - 1
-      })
-      this._updateBoard()
+      this._translateCurrentPiece(block => { block.y = block.y - 1 })
     }
   }
 
@@ -119,14 +114,8 @@ class Tetris {
       , false)
     }
 
-    if (!hit) {
-      this._currentPiece.forEach(block => { this.board[block.y][block.x] = null })
-      this._currentPiece.forEach(block => {
-        this.board[block.y][block.x + xShift] = block
-        block.x = block.x + xShift
-      })
-      this._updateBoard()
-    }
+    if (!hit)
+      this._translateCurrentPiece(block => { block.x = block.x + xShift })
   }
 
   rotatePiece () {
@@ -146,7 +135,7 @@ class Tetris {
     })
     const xShift = Math.min(0, Math.max(-2, (BOARD_SIZE.x - 1) - (piecePosition.x + rotatedPieceProperties.width - 1))) // Move piece left if it hits the wall after rotation
     const rotatedPiece = this._currentPiece.map(block => {
-      return Object.assign({ ...block }, {
+      return Object.assign({ x: block.x, y: block.y }, {
         x: piecePosition.y - block.y + piecePosition.x + Math.floor(rotatedPieceProperties.height / 2 - 1) + xShift,
         y: block.x - piecePosition.x + piecePosition.y - (rotatedPieceProperties.height - 1),
       })
@@ -158,13 +147,20 @@ class Tetris {
     , false)
 
     if (!hit) {
-      this._currentPiece.forEach(block => { this.board[block.y][block.x] = null })
-      this._currentPiece.forEach((block, i) => {
+      this._translateCurrentPiece((block, i) => {
         Object.assign(block, rotatedPiece[i])
         this.board[block.y][block.x] = block
       })
-      this._updateBoard()
     }
+  }
+
+  _translateCurrentPiece (callback) {
+    this._currentPiece.forEach(block => { this.board[block.y][block.x] = null })
+    this._currentPiece.forEach((block, i) => {
+      callback(block, i)
+      this.board[block.y][block.x] = block
+    })
+    this._updateBoard()
   }
 
   _addNewPiece () {
