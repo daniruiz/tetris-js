@@ -134,14 +134,16 @@ class Tetris {
       width: 0,
     })
     const xShift = Math.min(0, Math.max(-2, (BOARD_SIZE.x - 1) - (piecePosition.x + rotatedPieceProperties.width - 1))) // Move piece left if it hits the wall after rotation
-    const rotatedPiece = this._currentPiece.map(block => {
-      return Object.assign({ x: block.x, y: block.y }, {
-        x: piecePosition.y - block.y + piecePosition.x + Math.floor(rotatedPieceProperties.height / 2 - 1) + xShift,
-        y: block.x - piecePosition.x + piecePosition.y - (rotatedPieceProperties.height - 1),
-      })
-    })
+    const rotatedPiece = this._currentPiece.map(block => Object.assign({
+      x: block.x,
+      y: block.y,
+    }, {
+      x: piecePosition.y - block.y + piecePosition.x + xShift + Math.floor(rotatedPieceProperties.height / 2 - 1),
+      y: block.x - piecePosition.x + piecePosition.y - (rotatedPieceProperties.height - 1),
+    }))
     const hit = rotatedPiece.reduce((hit, block) => hit ||
         block.y < 0 ||
+        block.x < 0 ||
         block.x > BOARD_SIZE.x - 1 ||
         (!!this.board[block.y][block.x] && !this.board[block.y][block.x].currentPiece)
     , false)
