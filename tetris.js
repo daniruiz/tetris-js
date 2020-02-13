@@ -56,11 +56,16 @@ class Tetris {
 
     this._addNewPiece()
 
-    const timer = () => setTimeout(() => {
+    const timer = () => this._timer = setTimeout(() => {
       this.movePieceDown()
       timer()
     }, 1000)
     timer()
+  }
+
+  set onGameOver (callback) {
+    if (typeof callback !== 'function') return
+    this._gameOverCallback = callback
   }
 
   movePieceDown () {
@@ -121,10 +126,6 @@ class Tetris {
     console.log(piecePos)
   }
 
-  _gameOver () {
-    console.log('GAME OVER')
-  }
-
   _addNewPiece () {
     this._currentPiece.forEach(block => { block.currentPiece = false })
     this._currentPiece = []
@@ -173,12 +174,19 @@ class Tetris {
       }
     }
   }
+
+  _gameOver () {
+    clearTimeout(this._timer)
+    if (this._gameOverCallback)
+      this._gameOverCallback()
+  }
 }
 
 /* ++++++++++++++++++++++ */
 let tetris
 window.onload = () => {
   tetris = new Tetris(document.getElementById('tetris'))
+  tetris.onGameOver = () => console.log('GAME OVER')
   document.addEventListener('keydown', event => {
     switch (event.keyCode) {
       case KEYS.UP:
