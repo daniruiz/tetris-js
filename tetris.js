@@ -51,6 +51,7 @@ class Tetris {
     this.boardElement = boardElement
     this.boardElement.classList.add('__tetris-container')
 
+    this._speed = 1000
     this._currentPiece = []
 
     this.board = new Array(BOARD_SIZE.y)
@@ -63,7 +64,7 @@ class Tetris {
       this._timer = setTimeout(() => {
         this.movePieceDown()
         timer()
-      }, 1000)
+      }, this._speed)
     }
     timer()
   }
@@ -74,6 +75,8 @@ class Tetris {
   }
 
   movePieceDown () {
+    this._speed *= 0.999
+
     const addNewPiece = this._currentPiece.reduce((addNewPiece, block) => addNewPiece ||
       block.y === 0 ||
       (!!this.board[block.y - 1][block.x] && !this.board[block.y - 1][block.x].currentPiece)
