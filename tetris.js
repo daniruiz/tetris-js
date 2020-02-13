@@ -98,7 +98,11 @@ class Tetris {
     }
   }
 
-  movePieceSide (side) {
+  movePieceLeft () { this._movePieceSide('left') }
+
+  movePieceRight () { this._movePieceSide('right') }
+
+  _movePieceSide (side) {
     let xShift
     let hit
     if (side === 'right') {
@@ -233,10 +237,10 @@ window.onload = () => {
         tetris.movePieceDown()
         break
       case KEYS.LEFT:
-        tetris.movePieceSide('left')
+        tetris.movePieceLeft()
         break
       case KEYS.RIGHT:
-        tetris.movePieceSide('right')
+        tetris.movePieceRight()
         break
       case KEYS.ACTION:
         tetris.rotatePiece()
