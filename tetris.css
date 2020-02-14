@@ -20,6 +20,15 @@
     --columns: 22;
 }
 
+.__tetris-container::before {
+    content: '';
+    display: block;
+    height: 3px;
+    background: white;
+    border-radius: 3px;
+    margin-top: 20%;
+}
+
 .__tetris-container [class^="piece--"] {
     height: calc(100% / var(--columns) - 1px);
     width: calc(100% /  var(--rows) - 1px);
