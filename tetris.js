@@ -83,10 +83,12 @@ class Tetris {
 
     if (addNewPiece) {
       const currentPieceRow = this._currentPiece.reduce((maxY, block) => Math.max(block.y, maxY), 0)
-      if (currentPieceRow >= BOARD_SIZE.y - 3)
+      if (currentPieceRow >= BOARD_SIZE.y - 3) {
         this._gameOver()
-      else
+      } else {
+        this._checkFullRows()
         this._addNewPiece()
+      }
     } else {
       this._translateCurrentPiece(block => { block.y = block.y - 1 })
     }
@@ -162,6 +164,22 @@ class Tetris {
       this.board[block.y][block.x] = block
     })
     this._updateBoard()
+  }
+
+  _checkFullRows () {
+    let fullRowIndexes = []
+    for (let y = 0; y < BOARD_SIZE.y; y++) {
+      let fullRow = true
+      for (let x = 0; x < BOARD_SIZE.x; x++)
+        fullRow &= !!this.board[y][x]
+      if (fullRow)
+        fullRowIndexes.unshift(y)
+    }
+    fullRowIndexes.forEach(y => {
+      this.board[y].forEach(({ element }, i) => setTimeout(() => element.remove(), 10 * i))
+      this.board.splice(y, 1)
+      this.board.push(new Array(BOARD_SIZE.x))
+    })
   }
 
   _addNewPiece () {
