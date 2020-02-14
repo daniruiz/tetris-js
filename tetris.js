@@ -41,7 +41,6 @@ const KEYS = {
   DOWN: 40,
   LEFT: 37,
   RIGHT: 39,
-  ACTION: 17,
 }
 
 class Tetris {
@@ -229,7 +228,7 @@ window.onload = () => {
   document.addEventListener('keydown', event => {
     switch (event.keyCode) {
       case KEYS.UP:
-        tetris.movePieceDown()
+        tetris.rotatePiece()
         break
       case KEYS.DOWN:
         tetris.movePieceDown()
@@ -239,9 +238,6 @@ window.onload = () => {
         break
       case KEYS.RIGHT:
         tetris.movePieceRight()
-        break
-      case KEYS.ACTION:
-        tetris.rotatePiece()
         break
     }
   })
