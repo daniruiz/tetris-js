@@ -29,6 +29,21 @@
     margin-top: 20%;
 }
 
+
+.__tetris-container::after {
+    content: attr(data-info-text);
+    display: block;
+    bottom: -40px;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    font-family: monospace;
+    font-size: 12px;
+    font-weight: bold;
+    color: black;
+    text-shadow: 0 0 2px rgba(0, 0, 0, .5);
+}
+
 .__tetris-container [class^="piece--"] {
     height: calc(100% / var(--columns) - 1px);
     width: calc(100% /  var(--rows) - 1px);

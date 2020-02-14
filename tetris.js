@@ -283,7 +283,10 @@ let tetris
 window.onload = () => {
   tetris = new Tetris(document.getElementById('tetris'))
   tetris.onGameOver = () => console.log('GAME OVER')
-  tetris.onInfoChage = (info) => console.log(info)
+  tetris.onInfoChage = (info) => {
+    document.getElementsByClassName('__tetris-container')[0]
+        .dataset.infoText = `Level ${info.level}  ::  Score ${info.score}`
+  }
   document.addEventListener('keydown', event => {
     switch (event.keyCode) {
       case KEYS.UP:
