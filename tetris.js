@@ -42,6 +42,7 @@ const KEYS = {
   LEFT: 37,
   RIGHT: 39,
 }
+const INITIAL_SPEED = 1000
 
 class Tetris {
   constructor (boardElement) {
@@ -50,18 +51,21 @@ class Tetris {
     this.boardElement = boardElement
     this.boardElement.classList.add('__tetris-container')
 
-    this._speed = 1000
-    this._currentPiece = []
+    this._score = 0
+    this._level = 0
+    this._speed = INITIAL_SPEED
 
     this.board = new Array(BOARD_SIZE.y)
     for (let y = 0; y < BOARD_SIZE.y; y++)
       this.board[y] = new Array(BOARD_SIZE.x)
 
+    this._currentPiece = []
     this._addNewPiece()
 
     const timer = () => {
       this._timer = setTimeout(() => {
         this.movePieceDown()
+        this.level = Math.ceil((INITIAL_SPEED - this._speed) / 100)
         timer()
       }, this._speed)
     }
@@ -69,8 +73,42 @@ class Tetris {
   }
 
   set onGameOver (callback) {
-    if (typeof callback !== 'function') return
+    if (typeof callback !== 'function')
+      return
     this._gameOverCallback = callback
+  }
+
+  set onInfoChage (callback) {
+    if (typeof callback !== 'function')
+      return
+    this._infoChangeCallback = callback
+  }
+
+  get level () { return this._level }
+
+  set level (level) {
+    if (level === this._level)
+      return
+    this._level = level
+    this._updateInfo()
+  }
+
+  get score () { return this._score }
+
+  set score (score) {
+    if (score === this._score)
+      return
+    this._score = score
+    this._updateInfo()
+  }
+
+  _updateInfo () {
+    if (this._infoChangeCallback) {
+      this._infoChangeCallback({
+        level: this.level,
+        score: this.score,
+      })
+    }
   }
 
   movePieceDown () {
@@ -180,6 +218,8 @@ class Tetris {
       this.board.splice(y, 1)
       this.board.push(new Array(BOARD_SIZE.x))
     })
+
+    this.score += fullRowIndexes.length * 100 * this.level
   }
 
   _addNewPiece () {
@@ -243,6 +283,7 @@ let tetris
 window.onload = () => {
   tetris = new Tetris(document.getElementById('tetris'))
   tetris.onGameOver = () => console.log('GAME OVER')
+  tetris.onInfoChage = (info) => console.log(info)
   document.addEventListener('keydown', event => {
     switch (event.keyCode) {
       case KEYS.UP:
