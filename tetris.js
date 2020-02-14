@@ -65,7 +65,7 @@ class Tetris {
     const timer = () => {
       this._timer = setTimeout(() => {
         this.movePieceDown()
-        this.level = Math.ceil((INITIAL_SPEED - this._speed) / 100)
+        this.level = Math.ceil((INITIAL_SPEED - this._speed) / 200)
         timer()
       }, this._speed)
     }
