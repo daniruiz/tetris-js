@@ -287,6 +287,25 @@ window.onload = () => {
     document.getElementsByClassName('__tetris-container')[0]
         .dataset.infoText = `Level ${info.level}  ::  Score ${info.score}`
   }
+
+  let leftKeyInterval
+  let downKeyInterval
+  let rightKeyInterval
+  let actionKeyInterval
+  document.getElementsByClassName('control--left')[0].ontouchstart = ({ target }) => {
+    leftKeyInterval = setInterval(() => tetris.movePieceLeft(), 50)
+    target.ontouchend = () => clearInterval(leftKeyInterval)
+  }
+  document.getElementsByClassName('control--down')[0].ontouchstart = ({ target }) => {
+    downKeyInterval = setInterval(() => tetris.movePieceDown(), 50)
+    target.ontouchend = () => clearInterval(downKeyInterval)
+  }
+  document.getElementsByClassName('control--right')[0].ontouchstart = ({ target }) => {
+    rightKeyInterval = setInterval(() => tetris.movePieceRight(), 50)
+    target.ontouchend = () => clearInterval(rightKeyInterval)
+  }
+  document.getElementsByClassName('control--action')[0].ontouchstart = () => tetris.rotatePiece()
+
   document.addEventListener('keydown', event => {
     switch (event.keyCode) {
       case KEYS.UP:
