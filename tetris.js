@@ -44,6 +44,7 @@ const KEYS = {
 }
 const INITIAL_SPEED = 1000
 const SPEED_MULTIPLIER = 0.9995
+const LEVEL_DIVIDER = 25
 
 class Tetris {
   constructor (boardElement) {
@@ -62,13 +63,11 @@ class Tetris {
     this._currentPiece = []
     this._addNewPiece()
 
-    const timer = () => {
-      this._timer = setTimeout(() => {
-        this.movePieceDown()
-        this.updateLevel()
-        timer()
-      }, this._speed)
-    }
+    const timer = () => setTimeout(() => {
+      this.movePieceDown()
+      this.updateLevel()
+      this._timer = timer()
+    }, this._speed)
     timer()
   }
 
@@ -87,9 +86,10 @@ class Tetris {
   get level () { return Math.floor(this._level) }
 
   updateLevel () {
+    this._speed *= SPEED_MULTIPLIER
     const previousLevel = this.level
 
-    this._level = (INITIAL_SPEED - this._speed) / 150 + 1
+    this._level = (INITIAL_SPEED - this._speed) / LEVEL_DIVIDER + 1
 
     if (previousLevel !== this.level)
       this._updateInfo()
@@ -114,7 +114,6 @@ class Tetris {
   }
 
   movePieceDown () {
-    this._speed *= SPEED_MULTIPLIER
 
     const addNewPiece = this._currentPiece.reduce((addNewPiece, block) => addNewPiece ||
       block.y === 0 ||
