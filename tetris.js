@@ -65,7 +65,7 @@ class Tetris {
     const timer = () => {
       this._timer = setTimeout(() => {
         this.movePieceDown()
-        this.level = (INITIAL_SPEED - this._speed) / 150
+        this.updateLevel()
         timer()
       }, this._speed)
     }
@@ -86,10 +86,10 @@ class Tetris {
 
   get level () { return Math.floor(this._level) }
 
-  set level (level) {
+  updateLevel () {
     const previousLevel = this.level
 
-    this._level = level + 1
+    this._level = (INITIAL_SPEED - this._speed) / 150 + 1
 
     if (previousLevel !== this.level)
       this._updateInfo()
@@ -207,7 +207,7 @@ class Tetris {
   }
 
   _checkFullRows () {
-    let fullRowIndexes = []
+    const fullRowIndexes = []
     for (let y = 0; y < BOARD_SIZE.y; y++) {
       let fullRow = true
       for (let x = 0; x < BOARD_SIZE.x; x++)
@@ -288,13 +288,12 @@ window.onload = () => {
   tetris.onGameOver = () => console.log('GAME OVER')
   tetris.onInfoChage = (info) => {
     document.getElementsByClassName('__tetris-container')[0]
-        .dataset.infoText = `Level ${info.level}  ::  Score ${info.score}`
+      .dataset.infoText = `Level ${info.level}  ::  Score ${info.score}`
   }
 
   let leftKeyInterval
   let downKeyInterval
   let rightKeyInterval
-  let actionKeyInterval
   document.getElementsByClassName('control--left')[0].ontouchstart = ({ target }) => {
     leftKeyInterval = setInterval(() => tetris.movePieceLeft(), 50)
     target.ontouchend = () => clearInterval(leftKeyInterval)
@@ -326,4 +325,3 @@ window.onload = () => {
     }
   })
 }
-
