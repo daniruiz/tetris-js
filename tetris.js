@@ -114,6 +114,7 @@ class Tetris {
   }
 
   movePieceDown () {
+    if (this._lockGame) return
 
     const addNewPiece = this._currentPiece.reduce((addNewPiece, block) => addNewPiece ||
       block.y === 0 ||
@@ -138,6 +139,8 @@ class Tetris {
   movePieceRight () { this._movePieceSide('right') }
 
   _movePieceSide (side) {
+    if (this._lockGame) return
+
     let xShift
     let hit
     if (side === 'right') {
@@ -159,6 +162,8 @@ class Tetris {
   }
 
   rotatePiece () {
+    if (this._lockGame) return
+
     const piecePosition = this._currentPiece.reduce((pos, block) => ({
       x: Math.min(block.x, pos.x),
       y: Math.max(block.y, pos.y),
@@ -274,6 +279,8 @@ class Tetris {
   }
 
   _gameOver () {
+    this._lockGame = true
+
     clearTimeout(this._timer)
     if (this._gameOverCallback)
       this._gameOverCallback()
