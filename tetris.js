@@ -43,6 +43,7 @@ const KEYS = {
   RIGHT: 39,
 }
 const INITIAL_SPEED = 1000
+const SPEED_MULTIPLIER = 0.9995
 
 class Tetris {
   constructor (boardElement) {
@@ -52,7 +53,6 @@ class Tetris {
     this.boardElement.classList.add('__tetris-container')
 
     this._score = 0
-    this._level = 0
     this._speed = INITIAL_SPEED
 
     this.board = new Array(BOARD_SIZE.y)
@@ -65,7 +65,7 @@ class Tetris {
     const timer = () => {
       this._timer = setTimeout(() => {
         this.movePieceDown()
-        this.level = Math.ceil((INITIAL_SPEED - this._speed) / 200)
+        this.level = (INITIAL_SPEED - this._speed) / 150
         timer()
       }, this._speed)
     }
@@ -84,16 +84,18 @@ class Tetris {
     this._infoChangeCallback = callback
   }
 
-  get level () { return this._level }
+  get level () { return Math.floor(this._level) }
 
   set level (level) {
-    if (level === this._level)
-      return
-    this._level = level
-    this._updateInfo()
+    const previousLevel = this.level
+
+    this._level = level + 1
+
+    if (previousLevel !== this.level)
+      this._updateInfo()
   }
 
-  get score () { return this._score }
+  get score () { return Math.floor(this._score) }
 
   set score (score) {
     if (score === this._score)
@@ -112,7 +114,7 @@ class Tetris {
   }
 
   movePieceDown () {
-    this._speed *= 0.999
+    this._speed *= SPEED_MULTIPLIER
 
     const addNewPiece = this._currentPiece.reduce((addNewPiece, block) => addNewPiece ||
       block.y === 0 ||
@@ -219,7 +221,8 @@ class Tetris {
       this.board.push(new Array(BOARD_SIZE.x))
     })
 
-    this.score += fullRowIndexes.length * 100 * this.level
+    const multiplier = val => val < 1 ? 0 : val + multiplier(val - 1)
+    this.score += multiplier(fullRowIndexes.length) * 100 * this._level
   }
 
   _addNewPiece () {
