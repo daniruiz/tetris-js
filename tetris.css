@@ -1,84 +1,11 @@
-#tetris {
-    height: 440px;
-    width: 200px;
-    margin-top: -40px;
-}
-
-#controls > div {
-    height: 15vw;
-    width: 15vw;
-    border-radius: 2vw;
-    background: rgba(0, 0, 0, .8);
-    position: absolute;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, .5);
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-}
-
-#controls > div::after {
-    content: '';
-    display: block;
-    border: 3vw solid transparent;
-    border-right-color: transparent;
-    border-right-color: white;
-    height: 0;
-    width: 0;
-    top: 50%;
-    left: 50%;
-    position: absolute;
-    transform: translate(-85%, -50%);
-}
-
-#controls .control--left {
-    left: 5vw;
-    bottom: 18vw;
-}
-
-#controls .control--down {
-    left: 21vw;
-    bottom: 5vw;
-    transform: rotate(-90deg)
-}
-
-#controls .control--right {
-    left: 37vw;
-    bottom: 18vw;
-    transform: rotate(180deg);
-}
-
-#controls .control--action {
-    right: 5vw;
-    bottom: 5vw;
-    height: 30vw;
-    width: 30vw;
-    border-radius: 100%;
-}
-
-#controls .control--action::after {
-    border: 0;
-    background: white;
-    border-radius: 100%;
-    height: 4vw;
-    width: 4vw;
-    transform: translate(-50%, -50%)
-}
-
-/* ++++++++++++++++++ */
-
 .__tetris-container {
     border-radius: 6px;
     background: #13151a;
     box-shadow: 0 2px 20px rgba(0, 0, 0, .6);
-    transform: translate(-50%, -50%);
     border: 5px solid #13151a;
     border-bottom: 5px solid black;
     border-top: 3px solid rgb(255, 255, 255, .1);
-    position: absolute;
-    top: 50%;
-    left: 50%;
+    position: relative;
 
     --rows: 10;
     --columns: 22;
@@ -93,21 +20,6 @@
     margin-top: 20%;
 }
 
-
-.__tetris-container::after {
-    content: attr(data-info-text);
-    display: block;
-    bottom: -40px;
-    position: absolute;
-    width: 100%;
-    text-align: center;
-    font-family: monospace;
-    font-size: 12px;
-    font-weight: bold;
-    color: black;
-    text-shadow: 0 0 2px rgba(0, 0, 0, .5);
-}
-
 .__tetris-container [class^="piece--"] {
     height: calc(100% / var(--columns) - 1px);
     width: calc(100% /  var(--rows) - 1px);
@@ -116,7 +28,7 @@
     display: inline-block;
     position: absolute;
     transition-property: left, bottom;
-    transition-duration: .1s
+    transition-duration: .1s;
 }
 
 .__tetris-container .piece--I { background-color: #d41919 }

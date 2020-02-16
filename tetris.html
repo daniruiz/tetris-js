@@ -5,7 +5,145 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
         <title>Tetяis</title>
         <link rel="stylesheet" href="tetris.css">
+        <style>
+            #tetris {
+                height: 440px;
+                width: 200px;
+                margin-top: -40px;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+            #tetris::after {
+                content: attr(data-info-text);
+                display: block;
+                bottom: -40px;
+                position: absolute;
+                width: 100%;
+                text-align: center;
+                font-family: monospace;
+                font-size: 12px;
+                font-weight: bold;
+                color: black;
+                text-shadow: 0 0 2px rgba(0, 0, 0, .5);
+            }
+
+            #controls > div {
+                height: 15vw;
+                width: 15vw;
+                border-radius: 2vw;
+                background: rgba(0, 0, 0, .8);
+                position: absolute;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, .5);
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+            }
+
+            #controls > div::after {
+                content: '';
+                display: block;
+                border: 3vw solid transparent;
+                border-right-color: transparent;
+                border-right-color: white;
+                height: 0;
+                width: 0;
+                top: 50%;
+                left: 50%;
+                position: absolute;
+                transform: translate(-85%, -50%);
+            }
+
+            #controls .control--left {
+                left: 5vw;
+                bottom: 18vw;
+            }
+
+            #controls .control--down {
+                left: 21vw;
+                bottom: 5vw;
+                transform: rotate(-90deg)
+            }
+
+            #controls .control--right {
+                left: 37vw;
+                bottom: 18vw;
+                transform: rotate(180deg);
+            }
+
+            #controls .control--action {
+                right: 5vw;
+                bottom: 5vw;
+                height: 30vw;
+                width: 30vw;
+                border-radius: 100%;
+            }
+
+            #controls .control--action::after {
+                border: 0;
+                background: white;
+                border-radius: 100%;
+                height: 4vw;
+                width: 4vw;
+                transform: translate(-50%, -50%)
+            }
+        </style>
         <script src="tetris.js"></script>
+        <script>
+          const KEYS = {
+            UP: 38,
+            DOWN: 40,
+            LEFT: 37,
+            RIGHT: 39,
+          }
+          let tetris
+          window.onload = () => {
+            tetris = new Tetris(document.getElementById('tetris'))
+            tetris.onGameOver = () => console.log('GAME OVER')
+            tetris.onInfoChage = info => {
+              document.getElementsByClassName('__tetris-container')[0]
+                .dataset.infoText = `Level ${info.level}  ::  Score ${info.score}`
+            }
+
+            let leftKeyInterval
+            let downKeyInterval
+            let rightKeyInterval
+            document.getElementsByClassName('control--left')[0].ontouchstart = ({ target }) => {
+              leftKeyInterval = setInterval(() => tetris.movePieceLeft(), 50)
+              target.ontouchend = () => clearInterval(leftKeyInterval)
+            }
+            document.getElementsByClassName('control--down')[0].ontouchstart = ({ target }) => {
+              downKeyInterval = setInterval(() => tetris.movePieceDown(), 50)
+              target.ontouchend = () => clearInterval(downKeyInterval)
+            }
+            document.getElementsByClassName('control--right')[0].ontouchstart = ({ target }) => {
+              rightKeyInterval = setInterval(() => tetris.movePieceRight(), 50)
+              target.ontouchend = () => clearInterval(rightKeyInterval)
+            }
+            document.getElementsByClassName('control--action')[0].ontouchstart = () => tetris.rotatePiece()
+
+            document.addEventListener('keydown', event => {
+              switch (event.keyCode) {
+                case KEYS.UP:
+                  tetris.rotatePiece()
+                  break
+                case KEYS.DOWN:
+                  tetris.movePieceDown()
+                  break
+                case KEYS.LEFT:
+                  tetris.movePieceLeft()
+                  break
+                case KEYS.RIGHT:
+                  tetris.movePieceRight()
+                  break
+              }
+            })
+          }
+        </script>
     </head>
     <body>
         <div id="tetris"></div>

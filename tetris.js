@@ -36,12 +36,6 @@ const PIECES = {
     ' 00',
   ],
 }
-const KEYS = {
-  UP: 38,
-  DOWN: 40,
-  LEFT: 37,
-  RIGHT: 39,
-}
 const INITIAL_SPEED = 1000
 const SPEED_MULTIPLIER = 0.9995
 const LEVEL_DIVIDER = 25
@@ -287,47 +281,3 @@ class Tetris {
   }
 }
 
-/* ++++++++++++++++++++++ */
-let tetris
-window.onload = () => {
-  tetris = new Tetris(document.getElementById('tetris'))
-  tetris.onGameOver = () => console.log('GAME OVER')
-  tetris.onInfoChage = (info) => {
-    document.getElementsByClassName('__tetris-container')[0]
-      .dataset.infoText = `Level ${info.level}  ::  Score ${info.score}`
-  }
-
-  let leftKeyInterval
-  let downKeyInterval
-  let rightKeyInterval
-  document.getElementsByClassName('control--left')[0].ontouchstart = ({ target }) => {
-    leftKeyInterval = setInterval(() => tetris.movePieceLeft(), 50)
-    target.ontouchend = () => clearInterval(leftKeyInterval)
-  }
-  document.getElementsByClassName('control--down')[0].ontouchstart = ({ target }) => {
-    downKeyInterval = setInterval(() => tetris.movePieceDown(), 50)
-    target.ontouchend = () => clearInterval(downKeyInterval)
-  }
-  document.getElementsByClassName('control--right')[0].ontouchstart = ({ target }) => {
-    rightKeyInterval = setInterval(() => tetris.movePieceRight(), 50)
-    target.ontouchend = () => clearInterval(rightKeyInterval)
-  }
-  document.getElementsByClassName('control--action')[0].ontouchstart = () => tetris.rotatePiece()
-
-  document.addEventListener('keydown', event => {
-    switch (event.keyCode) {
-      case KEYS.UP:
-        tetris.rotatePiece()
-        break
-      case KEYS.DOWN:
-        tetris.movePieceDown()
-        break
-      case KEYS.LEFT:
-        tetris.movePieceLeft()
-        break
-      case KEYS.RIGHT:
-        tetris.movePieceRight()
-        break
-    }
-  })
-}
