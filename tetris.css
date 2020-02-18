@@ -27,14 +27,59 @@
     box-shadow: 0 2px 4px -2px rgba(0,0,0,.3), inset 0 0 0 3px rgba(0, 0, 0, .05);
     display: inline-block;
     position: absolute;
-    transition-property: left, bottom;
+    transition-property: left, bottom, background-color;
     transition-duration: .1s;
 }
 
-.__tetris-container .piece--I { background-color: #d41919 }
-.__tetris-container .piece--O { background-color: #367bf0 }
-.__tetris-container .piece--T { background-color: #19a187 }
-.__tetris-container .piece--J { background-color: #ffc730 }
-.__tetris-container .piece--L { background-color: #b8174c }
-.__tetris-container .piece--S { background-color: #4aaee6 }
-.__tetris-container .piece--Z { background-color: #fd7d00 }
+.__tetris-container [class^="piece--next"] {
+    transform: scale(.5);
+    bottom: 95%;
+}
+
+.__tetris-container [class^="piece--next"]:nth-of-type(0) { left: 0%; transition-delay: 0ms; }
+.__tetris-container [class^="piece--next"]:nth-of-type(1) { left: 5%; transition-delay: 10ms; }
+.__tetris-container [class^="piece--next"]:nth-of-type(2) { left: 10%; transition-delay: 20ms; }
+.__tetris-container [class^="piece--next"]:nth-of-type(3) { left: 15%; transition-delay: 30ms; }
+
+.__tetris-container .piece--next--I:nth-of-type(1) { left: 0%; }
+.__tetris-container .piece--next--I:nth-of-type(2) { left: 5%; }
+.__tetris-container .piece--next--I:nth-of-type(3) { left: 10%; }
+.__tetris-container .piece--next--I:nth-of-type(4) { left: 15%; }
+
+.__tetris-container .piece--next--O:nth-of-type(1) { left: 0%; bottom: 92.5%; }
+.__tetris-container .piece--next--O:nth-of-type(2) { left: 0%; }
+.__tetris-container .piece--next--O:nth-of-type(3) { left: 5%; }
+.__tetris-container .piece--next--O:nth-of-type(4) { left: 5%; bottom: 92.5%; }
+
+.__tetris-container .piece--next--T:nth-of-type(1) { left: 0%; }
+.__tetris-container .piece--next--T:nth-of-type(2) { left: 5%; bottom: 92.5%; }
+.__tetris-container .piece--next--T:nth-of-type(3) { left: 5%; }
+.__tetris-container .piece--next--T:nth-of-type(4) { left: 10%; }
+
+.__tetris-container .piece--next--J:nth-of-type(1) { left: 0%; }
+.__tetris-container .piece--next--J:nth-of-type(2) { left: 5%; }
+.__tetris-container .piece--next--J:nth-of-type(3) { left: 10%; }
+.__tetris-container .piece--next--J:nth-of-type(4) { left: 10%; bottom: 92.5%; }
+
+.__tetris-container .piece--next--L:nth-of-type(1) { left: 0%; bottom: 92.5%; }
+.__tetris-container .piece--next--L:nth-of-type(2) { left: 0%; }
+.__tetris-container .piece--next--L:nth-of-type(3) { left: 5%; }
+.__tetris-container .piece--next--L:nth-of-type(4) { left: 10%; }
+
+.__tetris-container .piece--next--S:nth-of-type(1) { left: 0%; bottom: 92.5%; }
+.__tetris-container .piece--next--S:nth-of-type(2) { left: 5%; bottom: 92.5%; }
+.__tetris-container .piece--next--S:nth-of-type(3) { left: 5%; }
+.__tetris-container .piece--next--S:nth-of-type(4) { left: 10%; }
+
+.__tetris-container .piece--next--Z:nth-of-type(1) { left: 0%; }
+.__tetris-container .piece--next--Z:nth-of-type(2) { left: 5%; }
+.__tetris-container .piece--next--Z:nth-of-type(3) { left: 5%; bottom: 92.5%; }
+.__tetris-container .piece--next--Z:nth-of-type(4) { left: 10%; bottom: 92.5%; }
+
+.__tetris-container .piece--I, .__tetris-container .piece--next--I { background-color: #d41919 }
+.__tetris-container .piece--O, .__tetris-container .piece--next--O { background-color: #367bf0 }
+.__tetris-container .piece--T, .__tetris-container .piece--next--T { background-color: #19a187 }
+.__tetris-container .piece--J, .__tetris-container .piece--next--J { background-color: #ffc730 }
+.__tetris-container .piece--L, .__tetris-container .piece--next--L { background-color: #b8174c }
+.__tetris-container .piece--S, .__tetris-container .piece--next--S { background-color: #4aaee6 }
+.__tetris-container .piece--Z, .__tetris-container .piece--next--Z { background-color: #fd7d00 }

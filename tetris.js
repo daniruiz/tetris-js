@@ -46,6 +46,8 @@ class Tetris {
 
     this.boardElement = boardElement
     this.boardElement.classList.add('__tetris-container')
+    for (let i = 0; i < 4; i++)
+      boardElement.appendChild(Object.assign(document.createElement('DIV'), { className: 'piece--next' }))
 
     this._score = 0
     this._speed = INITIAL_SPEED
@@ -223,13 +225,22 @@ class Tetris {
     this.score += multiplier(fullRowIndexes.length) * 100 * this._level
   }
 
+  set _nextPieceType (type) {
+    this.__nextPieceType = type
+    document.querySelectorAll('[class^="piece--next"]').forEach(element => element.className = `piece--next--${type}`)
+  }
+
+  get _nextPieceType () { return this.__nextPieceType }
+
   _addNewPiece () {
+    const pieceTypes = Object.keys(PIECES)
+    const getRandomPieceType = () => pieceTypes[Math.floor(Math.random() * pieceTypes.length)]
+    const pieceType = this._nextPieceType || getRandomPieceType()
+
     this._currentPiece.forEach(block => { block.currentPiece = false })
     this._currentPiece = []
+    this._nextPieceType = getRandomPieceType()
 
-    const pieceKeys = Object.keys(PIECES)
-    const pieceNumber = Math.floor(Math.random() * pieceKeys.length)
-    const pieceType = pieceKeys[pieceNumber]
     const piece = PIECES[pieceType]
     const pieceWidth = piece[0].length
     const pieceHeight = piece.length
