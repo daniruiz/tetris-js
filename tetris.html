@@ -6,14 +6,31 @@
         <title>Tetяis</title>
         <link rel="stylesheet" href="tetris.css">
         <style>
+            html, body {
+                margin: 0;
+                padding: 0;
+            }
+
+            #tetris-container {
+                width: 100%;
+                max-width: 30vh;
+                margin: auto;
+                position: relative;
+                top: 5vh;
+            }
+
+            #tetris-container::before {
+                content: '';
+                display: block;
+                padding-top: calc(220% - 14px);
+            }
+
             #tetris {
-                height: 440px;
-                width: 200px;
-                margin-top: -40px;
                 position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
+                top: 0;
+                width: 100%;
+                height: 100%;
+                box-sizing: border-box;
             }
 
             #tetris::after {
@@ -24,7 +41,7 @@
                 width: 100%;
                 text-align: center;
                 font-family: monospace;
-                font-size: 12px;
+                font-size: 1.4vh;
                 font-weight: bold;
                 color: black;
                 text-shadow: 0 0 2px rgba(0, 0, 0, .5);
@@ -34,9 +51,9 @@
                 height: 15vw;
                 width: 15vw;
                 border-radius: 2vw;
-                background: rgba(0, 0, 0, .8);
+                background: black;
                 position: absolute;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, .5);
+                box-shadow: 0 2px 8px rgba(0, 0, 0, .5), inset 0 0 0 1.5vw rgba(255, 255, 255, .2);
                 -webkit-touch-callout: none;
                 -webkit-user-select: none;
                 -khtml-user-select: none;
@@ -91,6 +108,58 @@
                 width: 4vw;
                 transform: translate(-50%, -50%)
             }
+
+            #game-over {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                background: rgba(255, 255, 255, .5) url('/img/game-over.svg') no-repeat center;
+                background-size: contain;
+                height: 25vw;
+                max-height: 300px;
+                width: 100%;
+                backdrop-filter: blur(5px);
+                box-shadow: 0 5px 20px -10px rgba(0, 0, 0, .6);
+                display: none;
+            }
+
+            @media only screen and (min-width: 500px) {
+                #controls > div {
+                    height: 75px;
+                    width: 75px;
+                    border-radius: 10px;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, .5), inset 0 0 0 8px rgba(255, 255, 255, .2);
+                }
+
+                #controls > div::after { border-width: 15px; }
+
+                #controls .control--left {
+                    left: 25px;
+                    bottom: 90px;
+                }
+
+                #controls .control--down {
+                    left: 105px;
+                    bottom: 25px;
+                }
+
+                #controls .control--right {
+                    left: 185px;
+                    bottom: 90px;
+                }
+
+                #controls .control--action {
+                    right: 25px;
+                    bottom: 25px;
+                    height: 150px;
+                    width: 150px;
+                }
+
+                #controls .control--action::after {
+                    height: 20px;
+                    width: 20px;
+                }
+            }
         </style>
         <script src="tetris.js"></script>
         <script>
@@ -103,7 +172,7 @@
           let tetris
           window.onload = () => {
             tetris = new Tetris(document.getElementById('tetris'))
-            tetris.onGameOver = () => console.log('GAME OVER')
+            tetris.onGameOver = () => document.getElementById('game-over').style.display = 'block'
             tetris.onInfoChage = info => {
               document.getElementsByClassName('__tetris-container')[0]
                 .dataset.infoText = `Level ${info.level}  ::  Score ${info.score}`
@@ -126,7 +195,7 @@
             }
             document.getElementsByClassName('control--action')[0].ontouchstart = () => tetris.rotatePiece()
 
-            document.addEventListener('keydown', event => {
+            document.onkeydown = event => {
               switch (event.keyCode) {
                 case KEYS.UP:
                   tetris.rotatePiece()
@@ -141,17 +210,20 @@
                   tetris.movePieceRight()
                   break
               }
-            })
+            }
           }
         </script>
     </head>
     <body>
-        <div id="tetris"></div>
+        <div id="tetris-container">
+            <div id="tetris"></div>
+        </div>
         <div id="controls">
             <div class="control--left"></div>
             <div class="control--down"></div>
             <div class="control--right"></div>
             <div class="control--action"></div>
         </div>
+        <div id="game-over"></div>
     </body>
 </html>
