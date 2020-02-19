@@ -175,11 +175,13 @@ class Tetris {
       width: 0,
     })
     const xShift = Math.min(0, Math.max(-2, (BOARD_SIZE.x - 1) - (piecePosition.x + rotatedPieceProperties.width - 1))) // Move piece left if it hits the wall after rotation
+    let xRelativeAlign = Math.floor(rotatedPieceProperties.height / 2 - 1)
+    if (piecePosition.x + xRelativeAlign < 0) xRelativeAlign = 0
     const rotatedPiece = this._currentPiece.map(block => Object.assign({
       x: block.x,
       y: block.y,
     }, {
-      x: piecePosition.y - block.y + piecePosition.x + xShift + Math.floor(rotatedPieceProperties.height / 2 - 1),
+      x: piecePosition.y - block.y + piecePosition.x + xShift + xRelativeAlign,
       y: block.x - piecePosition.x + piecePosition.y - (rotatedPieceProperties.height - 1),
     }))
     const hit = rotatedPiece.reduce((hit, block) => hit ||
