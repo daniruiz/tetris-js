@@ -41,15 +41,8 @@ const SPEED_MULTIPLIER = 0.9995
 const LEVEL_DIVIDER = 25
 
 class Tetris {
-  constructor (boardElement) {
-    if (!(boardElement instanceof window.Element)) return
-
-    this.boardElement = boardElement
-    this.boardElement.classList.add('__tetris-container')
-    for (let i = 0; i < 4; i++)
-      boardElement.appendChild(Object.assign(document.createElement('DIV'), { className: 'piece--next' }))
-
-    this._score = 0
+  constructor () {
+    this.__score = 0
     this._speed = INITIAL_SPEED
 
     this.board = new Array(BOARD_SIZE.y)
@@ -57,14 +50,37 @@ class Tetris {
       this.board[y] = new Array(BOARD_SIZE.x)
 
     this._currentPiece = []
-    this._addNewPiece()
+  }
 
-    const timer = () => setTimeout(() => {
-      this.movePieceDown()
-      this.updateLevel()
-      this._timer = timer()
-    }, this._speed)
-    timer()
+  get BOARD_SIZE () { return BOARD_SIZE }
+
+  get level () { return Math.floor(this._level) }
+
+  get _level () { return this.__level }
+
+  set _level (level) {
+    const previousLevel = this.level
+    this.__level = level
+    if (previousLevel !== this.level)
+      this._updateInfo()
+  }
+
+  get score () { return this._score }
+
+  get _score () { return Math.floor(this.__score) }
+
+  set _score (score) {
+    if (score === this.__score)
+      return
+    this.__score = score
+    this._updateInfo()
+  }
+
+  get _nextPieceType () { return this.__nextPieceType }
+
+  set _nextPieceType (type) {
+    this.__nextPieceType = type
+    this._updateInfo()
   }
 
   set onGameOver (callback) {
@@ -79,34 +95,30 @@ class Tetris {
     this._infoChangeCallback = callback
   }
 
-  get level () { return Math.floor(this._level) }
-
-  updateLevel () {
-    this._speed *= SPEED_MULTIPLIER
-    const previousLevel = this.level
-
-    this._level = (INITIAL_SPEED - this._speed) / LEVEL_DIVIDER + 1
-
-    if (previousLevel !== this.level)
-      this._updateInfo()
-  }
-
-  get score () { return Math.floor(this._score) }
-
-  set score (score) {
-    if (score === this._score)
-      return
-    this._score = score
-    this._updateInfo()
-  }
-
   _updateInfo () {
     if (this._infoChangeCallback) {
       this._infoChangeCallback({
         level: this.level,
         score: this.score,
+        nextPieceType: this._nextPieceType
       })
     }
+  }
+
+  start () {
+    this._addNewPiece()
+
+    const timer = () => setTimeout(() => {
+      this.movePieceDown()
+      this._updateLevel()
+      this._timer = timer()
+    }, this._speed)
+    timer()
+  }
+
+  _updateLevel () {
+    this._speed *= SPEED_MULTIPLIER
+    this._level = (INITIAL_SPEED - this._speed) / LEVEL_DIVIDER + 1
   }
 
   movePieceDown () {
@@ -205,7 +217,7 @@ class Tetris {
       callback(block, i)
       this.board[block.y][block.x] = block
     })
-    this._updateBoard()
+    this._updateVisualBoard()
   }
 
   _checkFullRows () {
@@ -218,31 +230,21 @@ class Tetris {
         fullRowIndexes.unshift(y)
     }
     fullRowIndexes.forEach(y => {
-      this.board[y].forEach(({ element }, i) => setTimeout(() => element.remove(), 10 * i))
+      this.board[y].forEach((block, i) => setTimeout(() => this._deleteVisualBlock(block), 10 * i))
       this.board.splice(y, 1)
       this.board.push(new Array(BOARD_SIZE.x))
     })
 
     const multiplier = val => val < 1 ? 0 : val + multiplier(val - 1)
-    this.score += multiplier(fullRowIndexes.length) * 100 * this._level
+    this._score += multiplier(fullRowIndexes.length) * 100 * this._level
   }
-
-  set _nextPieceType (type) {
-    this.__nextPieceType = type
-    document.querySelectorAll('[class^="piece--next"]').forEach(element => element.className = `piece--next--${type}`)
-  }
-
-  get _nextPieceType () { return this.__nextPieceType }
 
   _addNewPiece () {
     const pieceTypes = Object.keys(PIECES)
     const getRandomPieceType = () => pieceTypes[Math.floor(Math.random() * pieceTypes.length)]
     const pieceType = this._nextPieceType || getRandomPieceType()
 
-    this._currentPiece.forEach(block => {
-      block.currentPiece = false
-      block.element.classList.remove('piece--current')
-    })
+    this._currentPiece.forEach(block => { block.currentPiece = false })
     this._currentPiece = []
     this._nextPieceType = getRandomPieceType()
 
@@ -261,32 +263,26 @@ class Tetris {
       }
     }
 
-    this._updateBoard()
+    this._updateVisualBoard()
   }
 
   _generateBlock (type, x, y) {
     const block = {
-      element: Object.assign(document.createElement('DIV'), { className: `piece--${type} piece--current` }),
       currentPiece: true,
+      type,
       x,
       y,
     }
+    this._addVisualBlock(block)
     this._currentPiece.push(block)
-    this.boardElement.appendChild(block.element)
     return block
   }
 
-  _updateBoard () {
-    for (let y = 0; y < BOARD_SIZE.y; y++) {
-      for (let x = 0; x < BOARD_SIZE.x; x++) {
-        const block = this.board[y][x]
-        if (block) {
-          block.element.style.left = `${x * 100 / BOARD_SIZE.x}%`
-          block.element.style.bottom = `${y * 100 / BOARD_SIZE.y}%`
-        }
-      }
-    }
-  }
+  _addVisualBlock (block) {}
+
+  _deleteVisualBlock (block) {}
+
+  _updateVisualBoard () {}
 
   _gameOver () {
     this._lockGame = true
@@ -297,3 +293,8 @@ class Tetris {
   }
 }
 
+!(function (self) {
+  typeof exports === 'object' && typeof module === 'object'
+    ? module.exports = Tetris
+    : self.Tetris = Tetris
+}(typeof self !== 'undefined' ? self : this))

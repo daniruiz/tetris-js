@@ -166,7 +166,8 @@
                 }
             }
         </style>
-        <script src="tetris.js"></script>
+        <script src="js/Tetris.js"></script>
+        <script src="js/WebTetris.js"></script>
         <script>
           const KEYS = {
             UP: 38,
@@ -176,22 +177,20 @@
           }
           let tetris
           window.onload = () => {
-            tetris = new Tetris(document.getElementById('tetris'))
-            tetris.onGameOver = () => document.getElementById('game-over').style.display = 'block'
+            tetris = new WebTetris(document.getElementById('tetris'))
+            tetris.onGameOver = () => { document.getElementById('game-over').style.display = 'block' }
             tetris.onInfoChage = info => {
+              document.querySelectorAll('[class^="piece--next"]')
+                .forEach(element => element.className = `piece--next--${info.nextPieceType}`)
               document.getElementsByClassName('__tetris-container')[0]
                 .dataset.infoText = `Level ${info.level}  ::  Score ${info.score}`
             }
-
-            let leftKeyInterval
-            let downKeyInterval
-            let rightKeyInterval
 
             const keyPress = (target, action) => {
               action()
 
               let interval
-              let timeout = setTimeout(() => {
+              const timeout = setTimeout(() => {
                 document.getElementById('tetris').classList.add('key-press')
                 interval = setInterval(() => action(), 50)
               }, 250)
