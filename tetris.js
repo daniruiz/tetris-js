@@ -237,7 +237,10 @@ class Tetris {
     const getRandomPieceType = () => pieceTypes[Math.floor(Math.random() * pieceTypes.length)]
     const pieceType = this._nextPieceType || getRandomPieceType()
 
-    this._currentPiece.forEach(block => { block.currentPiece = false })
+    this._currentPiece.forEach(block => {
+      block.currentPiece = false
+      block.element.classList.remove('piece--current')
+    })
     this._currentPiece = []
     this._nextPieceType = getRandomPieceType()
 
@@ -261,7 +264,7 @@ class Tetris {
 
   _generateBlock (type, x, y) {
     const block = {
-      element: Object.assign(document.createElement('DIV'), { className: `piece--${type}` }),
+      element: Object.assign(document.createElement('DIV'), { className: `piece--${type} piece--current` }),
       currentPiece: true,
       x,
       y,

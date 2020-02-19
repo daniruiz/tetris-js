@@ -47,6 +47,11 @@
                 text-shadow: 0 0 2px rgba(0, 0, 0, .5);
             }
 
+            #tetris.key-press .piece--current {
+                transition-duration: .05s;
+                transition-timing-function: linear;
+            }
+
             #controls > div {
                 height: 15vw;
                 width: 15vw;
@@ -181,19 +186,29 @@
             let leftKeyInterval
             let downKeyInterval
             let rightKeyInterval
-            document.getElementsByClassName('control--left')[0].ontouchstart = ({ target }) => {
-              leftKeyInterval = setInterval(() => tetris.movePieceLeft(), 50)
-              target.ontouchend = () => clearInterval(leftKeyInterval)
+
+            const keyPress = (target, action) => {
+              action()
+
+              let interval
+              let timeout = setTimeout(() => {
+                document.getElementById('tetris').classList.add('key-press')
+                interval = setInterval(() => action(), 50)
+              }, 250)
+              target.ontouchend = () => {
+                document.getElementById('tetris').classList.remove('key-press')
+                clearInterval(interval)
+                clearTimeout(timeout)
+              }
             }
-            document.getElementsByClassName('control--down')[0].ontouchstart = ({ target }) => {
-              downKeyInterval = setInterval(() => tetris.movePieceDown(), 50)
-              target.ontouchend = () => clearInterval(downKeyInterval)
-            }
-            document.getElementsByClassName('control--right')[0].ontouchstart = ({ target }) => {
-              rightKeyInterval = setInterval(() => tetris.movePieceRight(), 50)
-              target.ontouchend = () => clearInterval(rightKeyInterval)
-            }
-            document.getElementsByClassName('control--action')[0].ontouchstart = () => tetris.rotatePiece()
+            document.getElementsByClassName('control--left')[0].ontouchstart =
+              ({ target }) => keyPress(target, () => tetris.movePieceLeft())
+            document.getElementsByClassName('control--down')[0].ontouchstart =
+              ({ target }) => keyPress(target, () => tetris.movePieceDown())
+            document.getElementsByClassName('control--right')[0].ontouchstart =
+              ({ target }) => keyPress(target, () => tetris.movePieceRight())
+            document.getElementsByClassName('control--action')[0].ontouchstart =
+              () => tetris.rotatePiece()
 
             document.onkeydown = event => {
               switch (event.keyCode) {
