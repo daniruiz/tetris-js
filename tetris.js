@@ -119,7 +119,7 @@ class Tetris {
 
     if (addNewPiece) {
       const currentPieceRow = this._currentPiece.reduce((maxY, block) => Math.max(block.y, maxY), 0)
-      if (currentPieceRow >= BOARD_SIZE.y - 3) {
+      if (currentPieceRow >= BOARD_SIZE.y - 2) {
         this._gameOver()
       } else {
         this._checkFullRows()
