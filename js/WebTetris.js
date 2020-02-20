@@ -18,11 +18,11 @@ class WebTetris extends Tetris {
   }
 
   _addVisualBlock (block) {
-    block.element = Object.assign(document.createElement('DIV'), { className: `piece--${block.type} piece--current` })
+    block.element = Object.assign(document.createElement('DIV'), { className: `piece--${block.type}` })
     this.boardElement.appendChild(block.element)
   }
 
-  _deleteVisualBlock ({ element }) { element.remove() }
+  _deleteVisualBlock ({ element }, i) { setTimeout(() => element.remove(), i * 10) }
 
   _updateVisualBoard (block, x, y) {
     const BOARD_SIZE = this.BOARD_SIZE

@@ -47,7 +47,7 @@
                 text-shadow: 0 0 2px rgba(0, 0, 0, .5);
             }
 
-            #tetris.key-press .piece--current {
+            #tetris.key-press [class^="piece--"]:not([class^="piece--next"]) {
                 transition-duration: .05s;
                 transition-timing-function: linear;
             }
@@ -166,6 +166,7 @@
                 }
             }
         </style>
+        <script src="js/TetrisBoard.js"></script>
         <script src="js/Tetris.js"></script>
         <script src="js/WebTetris.js"></script>
         <script>
