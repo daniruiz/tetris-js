@@ -7,7 +7,7 @@
   typeof exports === 'object' && typeof module === 'object'
     ? module.exports = Tetris
     : self.Tetris = Tetris
-}(typeof self !== 'undefined' ? self : this, (TetrisBoard => {
+}(typeof self !== 'undefined' ? self : this, ((TetrisBoard, INSTRUCTIONS) => {
   const PIECES = {
     I: [
       '0000',
@@ -86,22 +86,22 @@
       }
     }
 
-    movePieceLeft () { this._movePieceSide('left') }
+    movePieceLeft () { this._movePieceSide(INSTRUCTIONS.LEFT) }
 
-    movePieceRight () { this._movePieceSide('right') }
+    movePieceRight () { this._movePieceSide(INSTRUCTIONS.RIGHT) }
 
     _movePieceSide (side) {
       if (this._lockGame) return
 
       let xShift
       let hit
-      if (side === 'right') {
+      if (side === INSTRUCTIONS.RIGHT) {
         xShift = +1
         hit = this._currentPiece.reduce((hit, block) => hit ||
           block.x === this.BOARD_SIZE.x - 1 ||
           (!!this.board[block.y][block.x + xShift] && !this.board[block.y][block.x + xShift].currentPiece)
         , false)
-      } else if (side === 'left') {
+      } else if (side === INSTRUCTIONS.LEFT) {
         xShift = -1
         hit = this._currentPiece.reduce((hit, block) => hit ||
           block.x === 0 ||
@@ -218,7 +218,8 @@
         this._gameOverCallback()
     }
   }
-})(typeof TetrisBoard !== 'undefined'
-  ? TetrisBoard
-  : require('./TetrisBoard'))))
+})(
+  typeof TetrisBoard !== 'undefined' ? TetrisBoard : require('./TetrisBoard'),
+  typeof TETRIS_INSTRUCTIONS !== 'undefined' ?  TETRIS_INSTRUCTIONS : require('./TETRIS_INSTRUCTIONS'),
+)))
 
