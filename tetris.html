@@ -166,10 +166,10 @@
                 }
             }
         </style>
-        <script src="js/TETRIS_INSTRUCTIONS.js"></script>
         <script src="js/TetrisBoard.js"></script>
         <script src="js/Tetris.js"></script>
         <script src="js/WebTetris.js"></script>
+        <script src="js/WebTetrisClient.js"></script>
         <script>
           const KEYS = {
             UP: 38,
@@ -179,7 +179,8 @@
           }
           let tetris
           window.onload = () => {
-            tetris = new WebTetris(document.getElementById('tetris'))
+            const wsUrl = 'ws://localhost:8080'
+            tetris = new WebTetrisClient(document.getElementById('tetris'), wsUrl)
             tetris.onGameOver = () => { document.getElementById('game-over').style.display = 'block' }
             tetris.onInfoChage = info => {
               document.querySelectorAll('[class^="piece--next"]')

@@ -13,8 +13,6 @@ class WebTetris extends Tetris {
     this.boardElement.classList.add('__tetris-container')
     for (let i = 0; i < 4; i++)
       boardElement.appendChild(Object.assign(document.createElement('DIV'), { className: 'piece--next' }))
-
-    this.start()
   }
 
   _addVisualBlock (block) {

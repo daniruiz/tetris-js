@@ -7,7 +7,7 @@
   typeof exports === 'object' && typeof module === 'object'
     ? module.exports = Tetris
     : self.Tetris = Tetris
-}(typeof self !== 'undefined' ? self : this, ((TetrisBoard, INSTRUCTIONS) => {
+}(typeof self !== 'undefined' ? self : this, (TetrisBoard => {
   const PIECES = {
     I: [
       '0000',
@@ -41,7 +41,7 @@
   const SPEED_MULTIPLIER = 0.9995
   const LEVEL_DIVIDER = 25
 
-  return class extends TetrisBoard {
+  return class Tetris extends TetrisBoard {
     constructor () {
       super()
 
@@ -49,15 +49,49 @@
       this._currentPiece = []
     }
 
+    static get INSTRUCTIONS () {
+      return {
+        LEFT: 'left',
+        DOWN: 'down',
+        RIGHT: 'right',
+        ROTATE: 'rotate',
+        TIMER: 'timer',
+      }
+    }
+
     start () {
       this._addNewPiece()
 
       const timer = () => setTimeout(() => {
-        this.movePieceDown()
-        this._updateLevel()
+        this._timerCallback()
         this._timer = timer()
       }, this._speed)
       timer()
+    }
+
+    execInstruction (instruction) {
+      switch (instruction) {
+        case Tetris.INSTRUCTIONS.LEFT:
+          this.movePieceLeft()
+          break
+        case Tetris.INSTRUCTIONS.DOWN:
+          this.movePieceDown()
+          break
+        case Tetris.INSTRUCTIONS.RIGHT:
+          this.movePieceRight()
+          break
+        case Tetris.INSTRUCTIONS.ROTATE:
+          this.rotatePiece()
+          break
+        case Tetris.INSTRUCTIONS.TIMER:
+          this._timerCallback()
+          break
+      }
+    }
+
+    _timerCallback () {
+      this.movePieceDown()
+      this._updateLevel()
     }
 
     _updateLevel () {
@@ -86,22 +120,22 @@
       }
     }
 
-    movePieceLeft () { this._movePieceSide(INSTRUCTIONS.LEFT) }
+    movePieceLeft () { this._movePieceSide(Tetris.INSTRUCTIONS.LEFT) }
 
-    movePieceRight () { this._movePieceSide(INSTRUCTIONS.RIGHT) }
+    movePieceRight () { this._movePieceSide(Tetris.INSTRUCTIONS.RIGHT) }
 
     _movePieceSide (side) {
       if (this._lockGame) return
 
       let xShift
       let hit
-      if (side === INSTRUCTIONS.RIGHT) {
+      if (side === Tetris.INSTRUCTIONS.RIGHT) {
         xShift = +1
         hit = this._currentPiece.reduce((hit, block) => hit ||
           block.x === this.BOARD_SIZE.x - 1 ||
           (!!this.board[block.y][block.x + xShift] && !this.board[block.y][block.x + xShift].currentPiece)
         , false)
-      } else if (side === INSTRUCTIONS.LEFT) {
+      } else if (side === Tetris.INSTRUCTIONS.LEFT) {
         xShift = -1
         hit = this._currentPiece.reduce((hit, block) => hit ||
           block.x === 0 ||
@@ -184,13 +218,11 @@
     }
 
     _addNewPiece () {
-      const pieceTypes = Object.keys(PIECES)
-      const getRandomPieceType = () => pieceTypes[Math.floor(Math.random() * pieceTypes.length)]
-      const pieceType = this.nextPieceType || getRandomPieceType()
+      const pieceType = this.nextPieceType || this._getRandomPieceType()
 
       this._currentPiece.forEach(block => { block.currentPiece = false })
       this._currentPiece = []
-      this._nextPieceType = getRandomPieceType()
+      this._nextPieceType = this._getRandomPieceType()
 
       const piece = PIECES[pieceType]
       const pieceWidth = piece[0].length
@@ -210,6 +242,11 @@
       this._updateVisualBoard()
     }
 
+    _getRandomPieceType () {
+      const pieceTypes = Object.keys(PIECES)
+      return pieceTypes[Math.floor(Math.random() * pieceTypes.length)]
+    }
+
     _gameOver () {
       this._lockGame = true
 
@@ -218,8 +255,7 @@
         this._gameOverCallback()
     }
   }
-})(
-  typeof TetrisBoard !== 'undefined' ? TetrisBoard : require('./TetrisBoard'),
-  typeof TETRIS_INSTRUCTIONS !== 'undefined' ?  TETRIS_INSTRUCTIONS : require('./TETRIS_INSTRUCTIONS'),
+})(typeof TetrisBoard !== 'undefined'
+  ? TetrisBoard
+  : require('./TetrisBoard'),
 )))
-

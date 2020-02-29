@@ -13,7 +13,7 @@
     y: 22,
   }
 
-  return class {
+  return class TetrisBoard {
     constructor () {
       this.board = new Array(this.BOARD_SIZE.y)
       for (let y = 0; y < this.BOARD_SIZE.y; y++)
@@ -94,4 +94,3 @@
     _updateVisualBoard () {}
   }
 })()))
-
