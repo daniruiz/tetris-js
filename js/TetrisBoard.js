@@ -20,6 +20,7 @@
         this.board[y] = new Array(this.BOARD_SIZE.x)
 
       this.__score = 0
+      this.__level = 0
     }
 
     get BOARD_SIZE () { return BOARD_SIZE }
@@ -92,5 +93,13 @@
     _deleteVisualBlock (block, i) {}
 
     _updateVisualBoard () {}
+
+    _gameOver () {
+      this._lockGame = true
+
+      clearTimeout(this._timer)
+      if (this._gameOverCallback)
+        this._gameOverCallback()
+    }
   }
 })()))

@@ -13,6 +13,7 @@ class WebTetrisClient extends WebTetris {
     this._lockMessages = false
 
     this._webSocket = new WebSocket(url)
+    this._webSocket.onerror = e => this._error(e)
     this._webSocket.onmessage = ({ data }) => {
       const message = JSON.parse(data)
       if (message.instruction)
@@ -23,6 +24,12 @@ class WebTetrisClient extends WebTetris {
           this.start()
       }
     }
+  }
+
+  set onError (callback) {
+    if (typeof callback !== 'function')
+      return
+    this._onErroCallback = callback
   }
 
   start () {
@@ -59,5 +66,12 @@ class WebTetrisClient extends WebTetris {
   _sendData (data) {
     if (this._lockMessages) return
     this._webSocket.send(JSON.stringify(data))
+  }
+
+  _error (e) {
+    if (this._onErroCallback)
+      this._onErroCallback()
+    else
+      console.error(e)
   }
 }

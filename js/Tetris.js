@@ -246,14 +246,6 @@
       const pieceTypes = Object.keys(PIECES)
       return pieceTypes[Math.floor(Math.random() * pieceTypes.length)]
     }
-
-    _gameOver () {
-      this._lockGame = true
-
-      clearTimeout(this._timer)
-      if (this._gameOverCallback)
-        this._gameOverCallback()
-    }
   }
 })(typeof TetrisBoard !== 'undefined'
   ? TetrisBoard
