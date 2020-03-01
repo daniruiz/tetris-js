@@ -23,7 +23,7 @@
 .__tetris-container [class^="piece--"] {
     height: calc(100% / var(--columns) - 1px);
     width: calc(100% /  var(--rows) - 1px);
-    border-radius: 3px;
+    border-radius: 15%;
     box-shadow: 0 2px 4px -2px rgba(0,0,0,.3), inset 0 0 0 3px rgba(0, 0, 0, .1);
     display: inline-block;
     position: absolute;

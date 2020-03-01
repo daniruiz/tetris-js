@@ -1,14 +1,44 @@
 <!DOCTYPE html>
 <html>
     <head>
+         <!-- Meta -->
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-        <title>Tetяis</title>
-        <link rel="stylesheet" href="tetris.css">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+
+        <!-- Title -->
+        <title>Tetяis | DяA</title>
+        <meta name="apple-mobile-web-app-title" content="Tetяis | DяA">
+
+        <!-- Theme Colors -->
+        <meta name="theme-color" content="#ecedf2">
+        <meta name="msapplication-navbutton-color" content="#ecedf2">
+        <meta name="apple-mobile-web-app-status-bar-style" content="#ecedf2">
+
+        <!-- Icons -->
+        <link rel="shortcut icon" href="img/favicon.png">
+        <link rel="icon" type="image/png" href="img/tetris.png">
+        <link rel="apple-touch-icon-precomposed" href="img/tetris.png">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-43282075-1"></script>
+        <script>
+          if(location.hostname == 'drasite.com') {
+            window.dataLayer = window.dataLayer || []
+            function gtag () {dataLayer.push(arguments)}
+            gtag('js', new Date())
+            gtag('config', 'UA-43282075-1')
+          }
+        </script>
+
+        <!-- CSS styles -->
+        <link rel="stylesheet" href="css/tetris.css">
         <style>
             html, body {
                 margin: 0;
                 padding: 0;
+                background: #f2f3f7;
             }
 
             #tetris-container {
@@ -36,7 +66,7 @@
             #tetris::after {
                 content: attr(data-info-text);
                 display: block;
-                bottom: -40px;
+                bottom: -7%;
                 position: absolute;
                 width: 100%;
                 text-align: center;
@@ -44,21 +74,21 @@
                 font-size: 1.4vh;
                 font-weight: bold;
                 color: black;
-                text-shadow: 0 0 2px rgba(0, 0, 0, .5);
+                text-shadow: 0 0 .1em rgba(0, 0, 0, .5);
             }
 
             #tetris.key-press [class^="piece--"]:not([class^="piece--next"]) {
-                transition-duration: .05s;
+                transition-duration: .025s;
                 transition-timing-function: linear;
             }
 
             #controls > div {
                 height: 15vw;
                 width: 15vw;
-                border-radius: 2vw;
-                background: black;
+                border-radius: 25%;
+                background: rgba(255, 255, 255, .5);
                 position: absolute;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, .5), inset 0 0 0 1.5vw rgba(255, 255, 255, .2);
+                box-shadow: 0 3px 6px rgba(0, 0, 0, .1);
                 -webkit-touch-callout: none;
                 -webkit-user-select: none;
                 -khtml-user-select: none;
@@ -69,32 +99,41 @@
             #controls > div::after {
                 content: '';
                 display: block;
+                color: #96a0bc;
                 border: 3vw solid transparent;
-                border-right-color: transparent;
-                border-right-color: white;
+                border-radius: 25%;
                 height: 0;
                 width: 0;
                 top: 50%;
                 left: 50%;
                 position: absolute;
-                transform: translate(-85%, -50%);
             }
 
             #controls .control--left {
                 left: 5vw;
                 bottom: 18vw;
             }
+            #controls .control--left::after { 
+                border-right-color: currentColor;
+                transform: translate(-85%, -50%);
+            }
 
             #controls .control--down {
                 left: 21vw;
                 bottom: 5vw;
-                transform: rotate(-90deg)
+            }
+            #controls .control--down::after {
+                border-top-color: currentColor;
+                transform: translate(-50%, -15%)
             }
 
             #controls .control--right {
                 left: 37vw;
                 bottom: 18vw;
-                transform: rotate(180deg);
+            }
+            #controls .control--right::after {
+                border-left-color: currentColor;
+                transform: translate(-15%, -50%);
             }
 
             #controls .control--action {
@@ -107,7 +146,7 @@
 
             #controls .control--action::after {
                 border: 0;
-                background: white;
+                background: currentColor;
                 border-radius: 100%;
                 height: 4vw;
                 width: 4vw;
@@ -118,7 +157,7 @@
                 position: absolute;
                 top: 50%;
                 transform: translateY(-50%);
-                background: rgba(255, 255, 255, .5) url('game-over.svg') no-repeat center;
+                background: rgba(255, 255, 255, .5) url('img/game-over.svg') no-repeat center;
                 background-size: contain;
                 height: 25vw;
                 max-height: 300px;
@@ -132,8 +171,6 @@
                 #controls > div {
                     height: 75px;
                     width: 75px;
-                    border-radius: 10px;
-                    box-shadow: 0 2px 8px rgba(0, 0, 0, .5), inset 0 0 0 8px rgba(255, 255, 255, .2);
                 }
 
                 #controls > div::after { border-width: 15px; }
@@ -213,7 +250,10 @@
                   target.onmouseup = target.ontouchend = null
                 }
               }
-              element.ontouchstart = element.onmousedown = ({ target }) => keyPress(target, action)
+              element.ontouchstart = element.onmousedown = event => {
+                event.preventDefault()
+                keyPress(event.target, action)
+              }
             }
             addButtonPressEvent(document.getElementsByClassName('control--left')[0], () => tetris.movePieceLeft())
             addButtonPressEvent(document.getElementsByClassName('control--down')[0], () => tetris.movePieceDown())
