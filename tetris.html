@@ -216,6 +216,8 @@
           }
           let tetris
           window.onload = () => {
+            document.onclick = () => document.body.requestFullscreen()
+
             const wsUrl = 'ws://34.91.128.107:8080'
             const tetrisContainer = document.getElementById('tetris')
             const configureTetris = tetris => {
