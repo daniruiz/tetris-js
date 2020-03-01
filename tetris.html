@@ -179,38 +179,46 @@
           }
           let tetris
           window.onload = () => {
-            const wsUrl = 'ws://localhost:8080'
-            tetris = new WebTetrisClient(document.getElementById('tetris'), wsUrl)
-            tetris.onGameOver = () => { document.getElementById('game-over').style.display = 'block' }
-            tetris.onInfoChage = info => {
-              document.querySelectorAll('[class^="piece--next"]')
-                .forEach(element => element.className = `piece--next--${info.nextPieceType}`)
-              document.getElementsByClassName('__tetris-container')[0]
-                .dataset.infoText = `Level ${info.level}  ::  Score ${info.score}`
-            }
-
-            const keyPress = (target, action) => {
-              action()
-
-              let interval
-              const timeout = setTimeout(() => {
-                document.getElementById('tetris').classList.add('key-press')
-                interval = setInterval(() => action(), 50)
-              }, 250)
-              target.ontouchend = () => {
-                document.getElementById('tetris').classList.remove('key-press')
-                clearInterval(interval)
-                clearTimeout(timeout)
+            const wsUrl = 'ws://34.91.128.107:8080'
+            const tetrisContainer = document.getElementById('tetris')
+            const configureTetris = tetris => {
+              tetris.onGameOver = () => { document.getElementById('game-over').style.display = 'block' }
+              tetris.onInfoChage = info => {
+                document.querySelectorAll('[class^="piece--next"]')
+                  .forEach(element => {element.className = `piece--next--${info.nextPieceType}`})
+                document.getElementsByClassName('__tetris-container')[0]
+                  .dataset.infoText = `Level ${info.level}  ::  Score ${info.score}`
               }
+              return tetris
             }
-            document.getElementsByClassName('control--left')[0].ontouchstart =
-              ({ target }) => keyPress(target, () => tetris.movePieceLeft())
-            document.getElementsByClassName('control--down')[0].ontouchstart =
-              ({ target }) => keyPress(target, () => tetris.movePieceDown())
-            document.getElementsByClassName('control--right')[0].ontouchstart =
-              ({ target }) => keyPress(target, () => tetris.movePieceRight())
-            document.getElementsByClassName('control--action')[0].ontouchstart =
-              () => tetris.rotatePiece()
+            tetris = configureTetris(new WebTetrisClient(tetrisContainer, wsUrl))
+            tetris.onError = () => {
+              tetris = configureTetris(new WebTetris(tetrisContainer))
+              tetris.start()
+            }
+
+            const addButtonPressEvent = (element, action) => {
+              const keyPress = (target, action) => {
+                action()
+
+                let interval
+                const timeout = setTimeout(() => {
+                  document.getElementById('tetris').classList.add('key-press')
+                  interval = setInterval(() => action(), 50)
+                }, 250)
+                target.onmouseup = target.ontouchend = () => {
+                  document.getElementById('tetris').classList.remove('key-press')
+                  clearInterval(interval)
+                  clearTimeout(timeout)
+                  target.onmouseup = target.ontouchend = null
+                }
+              }
+              element.ontouchstart = element.onmousedown = ({ target }) => keyPress(target, action)
+            }
+            addButtonPressEvent(document.getElementsByClassName('control--left')[0], () => tetris.movePieceLeft())
+            addButtonPressEvent(document.getElementsByClassName('control--down')[0], () => tetris.movePieceDown())
+            addButtonPressEvent(document.getElementsByClassName('control--right')[0], () => tetris.movePieceRight())
+            addButtonPressEvent(document.getElementsByClassName('control--action')[0], () => tetris.rotatePiece())
 
             document.onkeydown = event => {
               switch (event.keyCode) {
