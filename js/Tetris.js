@@ -63,6 +63,8 @@
       this._addNewPiece()
 
       const timer = () => setTimeout(() => {
+        if (this._lockGame)
+          return
         this._timerCallback()
         this._timer = timer()
       }, this._speed)
@@ -245,6 +247,12 @@
     _getRandomPieceType () {
       const pieceTypes = Object.keys(PIECES)
       return pieceTypes[Math.floor(Math.random() * pieceTypes.length)]
+    }
+
+    _gameOver () {
+      this._lockGame = true
+      clearTimeout(this._timer)
+      super._gameOver()
     }
   }
 })(typeof TetrisBoard !== 'undefined'

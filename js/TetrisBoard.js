@@ -95,9 +95,6 @@
     _updateVisualBoard () {}
 
     _gameOver () {
-      this._lockGame = true
-
-      clearTimeout(this._timer)
       if (this._gameOverCallback)
         this._gameOverCallback()
     }
