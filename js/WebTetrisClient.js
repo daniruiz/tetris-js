@@ -68,6 +68,11 @@ class WebTetrisClient extends WebTetris {
     this._webSocket.send(JSON.stringify(data))
   }
 
+  saveScore (name) {
+    if (this.score !== 0)
+      this._sendData({ saveScoreName: name })
+  }
+
   _error (e) {
     if (this._onErroCallback)
       this._onErroCallback()
