@@ -24,8 +24,20 @@ window.onload = () => {
   }
   tetris = configureTetris(new WebTetrisClient(tetrisContainer, wsUrl))
   tetris.onError = () => {
+    document.getElementById('save-score-form').style.display = 'none'
     tetris = configureTetris(new WebTetris(tetrisContainer))
     tetris.start()
+  }
+
+  document.getElementById('save-score-form').onsubmit = ({ target}) => {
+    tetris.saveScore(target.querySelector('input[type=text]').value)
+  }
+
+  document.getElementById('show-scores').onclick = () => {
+    document.body.innerHTML = ''
+    tetris.scores.forEach(({name, score}) => {
+      document.body.innerHTML += '<br>' + name.padEnd(25, '.') + score
+    })
   }
 
   const addButtonPressEvent = (element, action) => {

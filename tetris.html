@@ -42,6 +42,7 @@
         <script src="js/tetris-page.js"></script>
     </head>
     <body>
+        <div id="show-scores">scores</div>
         <div id="tetris-container">
             <div id="tetris"></div>
         </div>
@@ -51,6 +52,11 @@
             <div class="control--right"></div>
             <div class="control--action"></div>
         </div>
-        <div id="game-over"></div>
+        <div id="game-over">
+          <form id="save-score-form">
+              <input type="text" placeholder="Name">
+              <input type="submit" value="save">
+          </form>
+        </div>
     </body>
 </html>

@@ -16,6 +16,8 @@ class WebTetrisClient extends WebTetris {
     this._webSocket.onerror = e => this._error(e)
     this._webSocket.onmessage = ({ data }) => {
       const message = JSON.parse(data)
+      if (message.scores)
+        this.scores = message.scores
       if (message.instruction)
         this.execInstruction(message.instruction)
       if (message.nextPieceType) {

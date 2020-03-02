@@ -12,8 +12,6 @@ class TetrisServer extends Tetris {
   constructor (webSocket) {
     super()
 
-    this._scoreList = JSON.parse(fs.readFileSync(sourceListFile))
-
     this._webSocket = webSocket
     this._webSocket.onmessage = ({ data }) => {
       const message = JSON.parse(data)
@@ -23,10 +21,13 @@ class TetrisServer extends Tetris {
         this._saveScore(message.saveScoreName)
     }
     this._webSocket.onclose = ({ code }) => {
-      if (code === 1001)
+      if (code === 1001 && !this._saved)
         this._saveScore('anonymous')
       this._gameOver()
     }
+
+    this._scoreList = JSON.parse(fs.readFileSync(sourceListFile))
+    this._sendData({ scores: this._scoreList })
 
     this.start()
   }
@@ -45,6 +46,7 @@ class TetrisServer extends Tetris {
   _sendData (data) { this._webSocket.send(JSON.stringify(data)) }
 
   _saveScore (name) {
+    this._saved = true
     this._webSocket.close()
 
     if (this.score === 0)
@@ -61,6 +63,10 @@ class TetrisServer extends Tetris {
     fs.writeFileSync(sourceListFile, JSON.stringify(this._scoreList, null, 2))
   }
 }
+
+process.on('uncaughtException', function (err) {
+  console.error('Caught exception: ', err);
+})
 
 const webSocketServer = new WebSocket.Server({ port: 8080 })
 webSocketServer.on('connection', webSocket => {
