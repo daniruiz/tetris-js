@@ -65,7 +65,7 @@ class TetrisServer extends Tetris {
 }
 
 process.on('uncaughtException', function (err) {
-  console.error('Caught exception: ', err);
+  console.error('Caught exception: ', err)
 })
 
 const webSocketServer = new WebSocket.Server({ port: 8080 })

@@ -39,6 +39,8 @@ class WebTetrisClient extends WebTetris {
     this._playing = true
   }
 
+  stop () { this._webSocket.close() }
+
   _timerCallback () {
     this._lockMessages = true
     super._timerCallback()

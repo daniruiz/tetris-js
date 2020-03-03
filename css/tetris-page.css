@@ -1,22 +1,112 @@
+@import url('https://fonts.googleapis.com/css?family=VT323&display=swap');
+
+input::placeholder, textarea::placeholder {
+    opacity: 1;
+    transition: opacity .2s;
+    color: inherit;
+}
+
+input:focus::placeholder, textarea:focus::placeholder { opacity: .2; }
+
+input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+    opacity: 1;
+    transition: opacity .2s;
+    color: inherit;
+}
+
+input:focus:-ms-input-placeholder, textarea:focus:-ms-input-placeholder { opacity: .2; }
+
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration { display: none; }
+
+* {
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+    outline: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    cursor: default;
+    letter-spacing: 0;
+}
+
 html, body {
     margin: 0;
     padding: 0;
     background: #f2f3f7;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", Ubuntu, Cantarell, "Helvetica Neue", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"
+    font-size: 13px;
+    overflow: auto;
+    height: 100%;
+    width: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", Ubuntu, Cantarell, "Helvetica Neue", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+.blinker {
+  animation: blinker 1s step-end infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
+#scores {
+    font-family: 'VT323';
+    font-size: 6vw;
+    width: 14.5em;
+    margin: auto;
+    text-shadow: 0 0 .1em
+    rgba(0, 0, 0, .5);
+    padding: 2em 0;
+}
+
+#scores a {
+    color: blue;
+    cursor: pointer;
+}
+
+#scores p { text-align: center; }
+
+#scores div { position: relative; }
+
+#scores span {
+    display: inline-block;
+    background: #f2f3f7;
+    z-index: 1;
+    position: relative;
+    outline: .1em solid #f2f3f7
+}
+
+#scores span:last-child { float: right; }
+
+#scores div::after {
+    content: "....................................";
+    position: absolute;
+    bottom: 0;
+    left: 0;
 }
 
 #show-scores {
-    height: 20px;
-    width: 70px;
+    height: 1.5em;
+    width: 5em;
     border-radius: 6px;
     color: black;
     font-weight: bold;
     text-align: center;
-    line-height: 19px;font-size: 12px;
-    background: black;
-    color: white;
+    line-height: 1.5em;
+    font-size: 1.5vh;
+    background: rgba(255, 255, 255, .5);
+    color: #96a0bc;
     position: absolute;
-    top: 3px;
+    top: .75em;
     z-index: 99;
     left: 50%;
     transform: translateX(-50%);
@@ -54,15 +144,16 @@ html, body {
 #tetris::after {
     content: attr(data-info-text);
     display: block;
-    bottom: -7%;
+    bottom: -5vh;
     position: absolute;
     width: 100%;
     text-align: center;
-    font-family: monospace;
-    font-size: 1.4vh;
+    font-family: 'VT323';
+    font-size: 2vh;
     font-weight: bold;
     color: black;
     text-shadow: 0 0 .1em rgba(0, 0, 0, .5);
+    transform: scaleX(120%);
 }
 
 #tetris.key-press [class^="piece--"]:not([class^="piece--next"]) {
@@ -164,12 +255,10 @@ html, body {
     transform: translateX(-50%);
 }
 
-#save-score-form input[type=text]::placeholder { opacity: 1; }
-
 #save-score-form input[type=text] {
     background: rgba(255,255,255,.97);
     border-radius: 6px 0 0 6px;
-    box-shadow: 0 5px 60px rgba(0, 0, 0, .6);
+    box-shadow: 0 5px 60px rgba(0, 0, 0, .6), inset 0 -4px rgba(0, 0, 0, .1);
     color: black;
     font-weight: bold;
     text-align: center;
@@ -184,17 +273,25 @@ html, body {
 #save-score-form input[type=submit] {
     border-radius: 0 6px 6px 0;
     background-color: #19a187;
-    box-shadow: 0 5px 60px rgba(0, 0, 0, .6);
+    box-shadow: 0 5px 60px rgba(0, 0, 0, .6), inset 0 -4px rgba(0, 0, 0, .1);
     color: white;
     font-weight: bold;
     height: 45px;
-    line-height: 45px;
+    text-transform: lowercase;
     width: 30%;
     border: 0;
     margin: 0;
     padding: 0;
     float: right;
     cursor: pointer;
+}
+
+@media only screen and (min-width: 700px) {
+    #show-scores {
+        font-size: 16px;
+        bottom: 30px;
+        top: auto;
+    }
 }
 
 @media only screen and (min-width: 500px) {

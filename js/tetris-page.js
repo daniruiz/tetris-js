@@ -1,3 +1,6 @@
+/* eslint-disable comma-dangle */
+/* eslint-disable curly */
+
 const KEYS = {
   UP: 38,
   DOWN: 40,
@@ -16,7 +19,7 @@ window.onload = () => {
     tetris.onGameOver = () => { document.getElementById('game-over').style.display = 'block' }
     tetris.onInfoChage = info => {
       document.querySelectorAll('[class^="piece--next"]')
-        .forEach(element => {element.className = `piece--next--${info.nextPieceType}`})
+        .forEach(element => { element.className = `piece--next--${info.nextPieceType}` })
       document.getElementsByClassName('__tetris-container')[0]
         .dataset.infoText = `Level ${info.level}  ::  Score ${info.score}`
     }
@@ -24,20 +27,24 @@ window.onload = () => {
   }
   tetris = configureTetris(new WebTetrisClient(tetrisContainer, wsUrl))
   tetris.onError = () => {
+    document.getElementById('show-scores').style.display = 'none'
     document.getElementById('save-score-form').style.display = 'none'
     tetris = configureTetris(new WebTetris(tetrisContainer))
     tetris.start()
   }
 
-  document.getElementById('save-score-form').onsubmit = ({ target}) => {
+  document.getElementById('save-score-form').onsubmit = ({ target }) => {
     tetris.saveScore(target.querySelector('input[type=text]').value)
   }
 
   document.getElementById('show-scores').onclick = () => {
-    document.body.innerHTML = ''
-    tetris.scores.forEach(({name, score}) => {
-      document.body.innerHTML += '<br>' + name.padEnd(25, '.') + score
-    })
+    tetris.stop()
+    const container = Object.assign(document.createElement('DIV'), { id: 'scores' })
+    container.innerHTML = tetris.scores.reduce((code, { name, score }) => {
+      code += `<div><span>${name}</span><span>${score}</span></div>`
+      return code
+    }, '<span class="blinker">&lt;</span> <a href=".">RETURN</a><p>▓▓▒▒░░ SCORES ░░▒▒▓▓</p>')
+    document.body.innerHTML = container.outerHTML
   }
 
   const addButtonPressEvent = (element, action) => {
