@@ -2,16 +2,14 @@
 /* eslint-disable curly */
 
 'use strict'
-const WebSocket = require('ws')
 const fs = require('fs')
 const Tetris = require('./Tetris')
 
-const sourceListFile = '../score-list.json'
-
-class TetrisServer extends Tetris {
-  constructor (webSocket) {
+module.exports = class TetrisServer extends Tetris {
+  constructor (webSocket, scoreListFile) {
     super()
 
+    this._scoreListFile = scoreListFile
     this._webSocket = webSocket
     this._webSocket.onmessage = ({ data }) => {
       const message = JSON.parse(data)
@@ -26,7 +24,7 @@ class TetrisServer extends Tetris {
       this._gameOver()
     }
 
-    this._scoreList = JSON.parse(fs.readFileSync(sourceListFile))
+    this._scoreList = JSON.parse(fs.readFileSync(this._scoreListFile))
     this._sendData({ scores: this._scoreList })
 
     this.start()
@@ -60,15 +58,6 @@ class TetrisServer extends Tetris {
       name,
       score: this.score,
     })
-    fs.writeFileSync(sourceListFile, JSON.stringify(this._scoreList, null, 2))
+    fs.writeFileSync(this._scoreListFile, JSON.stringify(this._scoreList, null, 2))
   }
 }
-
-process.on('uncaughtException', function (err) {
-  console.error('Caught exception: ', err)
-})
-
-const webSocketServer = new WebSocket.Server({ port: 8080 })
-webSocketServer.on('connection', webSocket => {
-  new TetrisServer(webSocket)
-})
