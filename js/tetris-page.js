@@ -12,8 +12,6 @@ const wsUrl = 'ws://34.91.128.107:8080'
 
 let tetris
 window.onload = () => {
-  document.onclick = () => document.body.requestFullscreen()
-
   const tetrisContainer = document.getElementById('tetris')
   const configureTetris = tetris => {
     tetris.onGameOver = () => { document.getElementById('game-over').style.display = 'block' }
