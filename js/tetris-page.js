@@ -15,7 +15,7 @@ window.onload = () => {
   const tetrisContainer = document.getElementById('tetris')
   const configureTetris = tetris => {
     tetris.onGameOver = () => { document.getElementById('game-over').style.display = 'block' }
-    tetris.onInfoChage = info => {
+    tetris.onInfoChange = info => {
       document.querySelectorAll('[class^="piece--next"]')
         .forEach(element => { element.className = `piece--next--${info.nextPieceType}` })
       document.getElementsByClassName('__tetris-container')[0]

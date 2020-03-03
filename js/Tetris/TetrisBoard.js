@@ -60,7 +60,7 @@
       this._gameOverCallback = callback
     }
 
-    set onInfoChage (callback) {
+    set onInfoChange (callback) {
       if (typeof callback !== 'function')
         return
       this._infoChangeCallback = callback
