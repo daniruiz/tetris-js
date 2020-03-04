@@ -45,6 +45,7 @@
   stop () { this._webSocket.close() }
 
   _timerCallback () {
+    this._sendData({ instruction: 'timer' })
     this._lockMessages = true
     super._timerCallback()
     this._lockMessages = false
@@ -70,14 +71,15 @@
     super.rotatePiece()
   }
 
-  _sendData (data) {
-    if (this._lockMessages) return
-    this._webSocket.send(JSON.stringify(data))
-  }
-
   saveScore (name) {
     if (this.score !== 0)
       this._sendData({ saveScoreName: name })
+  }
+
+  _sendData (data) {
+    if (this._lockMessages)
+      return
+    this._webSocket.send(JSON.stringify(data))
   }
 
   _error (e) {

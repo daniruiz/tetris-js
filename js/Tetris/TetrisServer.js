@@ -28,10 +28,14 @@ module.exports = class TetrisServer extends Tetris {
     this._sendData({ scores: this._scoreList })
   }
 
-  _timerCallback () {
-    this._sendData({ instruction: 'timer' })
-    super._timerCallback()
+  execInstruction (instruction) {
+    if (instruction === 'timer')
+      super._timerCallback()
+    else
+      super.execInstruction(instruction)
   }
+
+  _timerCallback () { this._sendData({ instruction: 'timer' }) }
 
   _getRandomPieceType () {
     const nextPieceType = super._getRandomPieceType()
