@@ -1,0 +1,21 @@
+{
+  "name": "tetris-js",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "server": "node js/tetris-server.js 8080"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daniruiz/tetris-js.git"
+  },
+  "author": "Daniel Ruiz de Alegría <daniel@drasite.com> (https://drasite.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/daniruiz/tetris-js/issues"
+  },
+  "homepage": "https://drasite.com/tetris-js",
+  "dependencies": {
+    "ws": "^7.2.1"
+  }
+}
