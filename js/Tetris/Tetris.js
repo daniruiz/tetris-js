@@ -3,7 +3,7 @@
 
 'use strict'
 
-!(function (self, Tetris) {
+;(function (self, Tetris) {
   typeof exports === 'object' && typeof module === 'object'
     ? module.exports = Tetris
     : self.Tetris = Tetris

@@ -3,9 +3,12 @@
 
 'use strict'
 
-class WebTetris extends Tetris {
+;(function (self, WebTetris) {
+  self.WebTetris = WebTetris
+}(typeof self !== 'undefined' ? self : this, class WebTetris extends Tetris {
   constructor (boardElement) {
-    if (!(boardElement instanceof window.Element)) return
+    if (!(boardElement instanceof window.Element))
+      throw new Error('You must pass a valid DOM element')
 
     super()
 
@@ -35,4 +38,4 @@ class WebTetris extends Tetris {
       }
     }
   }
-}
+}))

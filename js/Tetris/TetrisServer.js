@@ -26,8 +26,6 @@ module.exports = class TetrisServer extends Tetris {
 
     this._scoreList = JSON.parse(fs.readFileSync(this._scoreListFile))
     this._sendData({ scores: this._scoreList })
-
-    this.start()
   }
 
   _timerCallback () {
