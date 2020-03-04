@@ -17,5 +17,8 @@
   "homepage": "https://drasite.com/tetris-js",
   "dependencies": {
     "ws": "^7.2.1"
+  },
+  "devDependencies": {
+    "standard": "^14.3.1"
   }
 }
