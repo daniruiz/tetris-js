@@ -51,6 +51,9 @@
     this._lockMessages = false
   }
 
+  // Disable this function as the next piece is provided by the server with some delay
+  _getRandomPieceType () { return this.nextPieceType }
+
   movePieceDown () {
     this._sendData({ instruction: Tetris.INSTRUCTIONS.DOWN })
     super.movePieceDown()
