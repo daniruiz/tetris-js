@@ -38,8 +38,8 @@ window.onload = () => {
   document.getElementById('show-scores').onclick = () => {
     tetris.stop()
     const container = Object.assign(document.createElement('DIV'), { id: 'scores' })
-    container.innerHTML = tetris.scores.reduce((code, { name, score }) => {
-      code += `<div><span>${name}</span><span>${score}</span></div>`
+    container.innerHTML = tetris.scores.reduce((code, { name, score }, i) => {
+      code += `<div><span>${i+1}. ${name}</span><span>${score}</span></div>`
       return code
     }, '<span class="blinker">&lt;</span> <a href=".">RETURN</a><p>▓▓▒▒░░ SCORES ░░▒▒▓▓</p>')
     document.body.innerHTML = container.outerHTML
