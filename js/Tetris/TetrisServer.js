@@ -18,9 +18,9 @@ module.exports = class TetrisServer extends Tetris {
       if (message.saveScoreName)
         this._saveScore(message.saveScoreName)
     }
-    this._webSocket.onclose = ({ code }) => {
-      if (code === 1001 && !this._saved)
-        this._saveScore('anonymous')
+    this._webSocket.onclose = () => {
+      if (!this._saved)
+        this._saveScore()
       this._gameOver()
     }
 
@@ -28,14 +28,7 @@ module.exports = class TetrisServer extends Tetris {
     this._sendData({ scores: this._scoreList })
   }
 
-  execInstruction (instruction) {
-    if (instruction === 'timer')
-      super._timerCallback()
-    else
-      super.execInstruction(instruction)
-  }
-
-  _timerCallback () { this._sendData({ instruction: 'timer' }) }
+  start () { this._addNewPiece() }
 
   _getRandomPieceType () {
     const nextPieceType = super._getRandomPieceType()
@@ -45,7 +38,7 @@ module.exports = class TetrisServer extends Tetris {
 
   _sendData (data) { this._webSocket.send(JSON.stringify(data)) }
 
-  _saveScore (name) {
+  _saveScore (name = 'anonymous') {
     this._saved = true
     this._webSocket.close()
 

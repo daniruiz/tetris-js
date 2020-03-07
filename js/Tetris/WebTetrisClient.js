@@ -12,8 +12,9 @@
 
     super(boardElement)
 
-    this._playing = false
     this._lockMessages = false
+
+    let playing = false
 
     this._webSocket = new WebSocket(url)
     this._webSocket.onerror = e => this._error(e)
@@ -25,8 +26,10 @@
         this.execInstruction(message.instruction)
       if (message.nextPieceType) {
         this._nextPieceType = message.nextPieceType
-        if (!this._playing)
+        if (!playing) {
+          playing = true
           this.start()
+        }
       }
     }
   }
@@ -35,11 +38,6 @@
     if (typeof callback !== 'function')
       return
     this._onErroCallback = callback
-  }
-
-  start () {
-    this._addNewPiece()
-    this._playing = true
   }
 
   stop () { this._webSocket.close() }
@@ -80,14 +78,13 @@
   }
 
   _sendData (data) {
-    if (this._lockMessages)
-      return
-    this._webSocket.send(JSON.stringify(data))
+    if (!this._lockMessages)
+      this._webSocket.send(JSON.stringify(data))
   }
 
   _error (e) {
     if (this._onErroCallback)
-      this._onErroCallback()
+      this._onErroCallback(e)
     else
       console.error(e)
   }
