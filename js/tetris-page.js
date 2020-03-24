@@ -48,6 +48,7 @@ window.onload = () => {
   const addButtonPressEvent = (element, action) => {
     const keyPress = (target, action) => {
       action()
+      navigator.vibrate(20)
 
       let interval
       const timeout = setTimeout(() => {
