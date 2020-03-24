@@ -292,6 +292,8 @@ html, body {
         bottom: 30px;
         top: auto;
     }
+
+    #scores { font-size: 45px; }
 }
 
 @media only screen and (min-width: 500px) {
