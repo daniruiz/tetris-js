@@ -37,15 +37,16 @@
       ' 00',
     ],
   }
-  const INITIAL_SPEED = 1000
-  const SPEED_MULTIPLIER = 0.9995
+  const INITIAL_TIMEOUT = 1000
+  const TIMEOUT_MULTIPLIER = 0.99745
   const LEVEL_DIVIDER = 25
 
   return class Tetris extends TetrisBoard {
     constructor () {
       super()
 
-      this._speed = INITIAL_SPEED
+      this._timeout = INITIAL_TIMEOUT
+      this._totalGameTime = 0
       this._currentPiece = []
     }
 
@@ -67,7 +68,7 @@
           return
         this._timerCallback()
         this._timer = timer()
-      }, this._speed)
+      }, this._timeout)
       timer()
     }
 
@@ -92,13 +93,14 @@
     }
 
     _timerCallback () {
+      this._totalGameTime += this._timeout
       this.movePieceDown()
       this._updateLevel()
     }
 
     _updateLevel () {
-      this._speed *= SPEED_MULTIPLIER
-      this._level = (INITIAL_SPEED - this._speed) / LEVEL_DIVIDER + 1
+      this._timeout = INITIAL_TIMEOUT * TIMEOUT_MULTIPLIER ** (this._totalGameTime / 1000)
+      this._level = (INITIAL_TIMEOUT - this._timeout) / LEVEL_DIVIDER + 1
     }
 
     movePieceDown () {
