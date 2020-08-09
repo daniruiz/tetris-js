@@ -6,7 +6,7 @@ const WebSocket = require('ws')
 const TetrisServer = require('./Tetris/TetrisServer')
 
 const [PORT] = process.argv.slice(2)
-const SCORELIST_FILE = '../score-list.json'
+const SCORELIST_FILE = 'score-list.json'
 
 process.on('uncaughtException', function (err) {
   console.error('Caught exception: ', err)
