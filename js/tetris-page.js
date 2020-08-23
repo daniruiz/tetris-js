@@ -37,12 +37,14 @@ window.onload = () => {
 
   document.getElementById('show-scores').onclick = () => {
     tetris.stop()
-    const container = Object.assign(document.createElement('DIV'), { id: 'scores' })
-    container.innerHTML = tetris.scores.reduce((code, { name, score }, i) => {
-      code += `<div><span>${i+1}. ${name}</span><span>${score}</span></div>`
-      return code
-    }, '<span class="blinker">&lt;</span> <a href=".">RETURN</a><p>▓▓▒▒░░ SCORES ░░▒▒▓▓</p>')
-    document.body.innerHTML = container.outerHTML
+    document.body.innerHTML = Object.assign(document.createElement('DIV'), {
+      id: 'scores',
+      innerHTML: tetris.scores.reduce((code, { name, score }, i) => {
+        const nameElement = Object.assign(document.createElement('SPAN'))
+        nameElement.innerText = `${i+1}. ${name}`
+        return code + `<div><span>${nameElement.outerHTML}</span><span>${score}</span></div>`
+      }, '<span class="blinker">&lt;</span> <a href=".">RETURN</a><p>▓▓▒▒░░ SCORES ░░▒▒▓▓</p>')
+      }).outerHTML
   }
 
   const addButtonPressEvent = (element, action) => {
