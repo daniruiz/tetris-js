@@ -103,6 +103,12 @@
       this._level = (INITIAL_TIMEOUT - this._timeout) / LEVEL_DIVIDER + 1
     }
 
+    pushPiece () {
+      let interval = setInterval(() => {
+        this.movePieceDown() || clearInterval(interval)
+       }, 5);
+    }
+
     movePieceDown () {
       if (this._lockGame) return
 
@@ -119,8 +125,10 @@
           this._checkFullRows()
           this._addNewPiece()
         }
+        return false
       } else {
         this._translateCurrentPiece(block => { block.y = block.y - 1 })
+        return true
       }
     }
 

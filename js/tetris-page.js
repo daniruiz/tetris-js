@@ -6,6 +6,7 @@ const KEYS = {
   DOWN: 40,
   LEFT: 37,
   RIGHT: 39,
+  SPACE: 32,
 }
 
 const wsUrl = 'ws://34.91.128.107:8080'
@@ -70,8 +71,9 @@ window.onload = () => {
     }
   }
   addButtonPressEvent(document.getElementsByClassName('control--left')[0], () => tetris.movePieceLeft())
-  addButtonPressEvent(document.getElementsByClassName('control--down')[0], () => tetris.movePieceDown())
   addButtonPressEvent(document.getElementsByClassName('control--right')[0], () => tetris.movePieceRight())
+  addButtonPressEvent(document.getElementsByClassName('control--down')[0], () => tetris.movePieceDown())
+  addButtonPressEvent(document.getElementsByClassName('control--up')[0], () => tetris.pushPiece())
   addButtonPressEvent(document.getElementsByClassName('control--action')[0], () => tetris.rotatePiece())
 
   document.onkeydown = event => {
@@ -87,6 +89,9 @@ window.onload = () => {
         break
       case KEYS.RIGHT:
         tetris.movePieceRight()
+        break
+      case KEYS.SPACE:
+        tetris.pushPiece()
         break
     }
   }

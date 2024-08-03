@@ -176,7 +176,8 @@ html, body {
     -ms-user-select: none;
 }
 
-#controls > div::after {
+#controls > div::after,
+#controls > div::before {
     content: '';
     display: block;
     color: #96a0bc;
@@ -198,13 +199,26 @@ html, body {
     transform: translate(-85%, -50%);
 }
 
+#controls .control--up {
+    left: 21vw;
+    bottom: 26vw;
+}
+#controls .control--up::after {
+    border-top-color: currentColor;
+    transform: translate(-50%, 0%);
+}
+#controls .control--up::before {
+    border-top-color: currentColor;
+    transform: translate(-50%, -30%);
+}
+
 #controls .control--down {
     left: 21vw;
     bottom: 5vw;
 }
 #controls .control--down::after {
     border-top-color: currentColor;
-    transform: translate(-50%, -15%)
+    transform: translate(-50%, -15%);
 }
 
 #controls .control--right {
@@ -302,21 +316,27 @@ html, body {
         width: 75px;
     }
 
-    #controls > div::after { border-width: 15px; }
+    #controls > div::after,
+    #controls > div::before { border-width: 15px; }
 
     #controls .control--left {
         left: 25px;
         bottom: 90px;
     }
 
-    #controls .control--down {
+    #controls .control--up {
         left: 105px;
-        bottom: 25px;
+        bottom: 130px;
     }
 
     #controls .control--right {
         left: 185px;
         bottom: 90px;
+    }
+
+    #controls .control--down {
+        left: 105px;
+        bottom: 25px;
     }
 
     #controls .control--action {
