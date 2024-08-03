@@ -12,6 +12,7 @@
 
     super()
 
+    this.scores = JSON.parse(localStorage.getItem("score")) || []
     this.boardElement = boardElement
     this.boardElement.classList.add('__tetris-container')
     this.boardElement.innerHTML = ''
@@ -37,5 +38,13 @@
         }
       }
     }
+  }
+
+  saveScore (name) {
+    if (!this.score)
+      return
+    this.scores.push({ name, score: this.score })
+    this.scores.sort(({ score: scoreA }, { score: scoreB }) => scoreB - scoreA)
+    localStorage.setItem("score", JSON.stringify(this.scores));
   }
 }))

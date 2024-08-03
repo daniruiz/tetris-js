@@ -9,8 +9,6 @@ const KEYS = {
   SPACE: 32,
 }
 
-const wsUrl = 'ws://34.91.128.107:8080'
-
 let tetris
 window.onload = () => {
   const tetrisContainer = document.getElementById('tetris')
@@ -24,20 +22,16 @@ window.onload = () => {
     }
     return tetris
   }
-  tetris = configureTetris(new WebTetrisClient(tetrisContainer, wsUrl))
-  tetris.onError = () => {
-    document.getElementById('show-scores').style.display = 'none'
-    document.getElementById('save-score-form').style.display = 'none'
-    tetris = configureTetris(new WebTetris(tetrisContainer))
-    tetris.start()
-  }
+  tetris = configureTetris(new WebTetris(tetrisContainer))
+  tetris.start()
 
   document.getElementById('save-score-form').onsubmit = ({ target }) => {
     tetris.saveScore(target.querySelector('input[type=text]').value)
   }
 
   document.getElementById('show-scores').onclick = () => {
-    tetris.stop()
+    // TODO
+    //tetris.stop()
     document.body.innerHTML = Object.assign(document.createElement('DIV'), {
       id: 'scores',
       innerHTML: tetris.scores.reduce((code, { name, score }, i) => {
