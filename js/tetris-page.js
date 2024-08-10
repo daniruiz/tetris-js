@@ -30,8 +30,7 @@ window.onload = () => {
   }
 
   document.getElementById('show-scores').onclick = () => {
-    // TODO
-    //tetris.stop()
+    tetris.stop()
     document.body.innerHTML = Object.assign(document.createElement('DIV'), {
       id: 'scores',
       innerHTML: tetris.scores.reduce((code, { name, score }, i) => {
