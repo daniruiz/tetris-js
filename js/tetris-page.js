@@ -83,9 +83,11 @@ window.onload = () => {
       case KEYS.RIGHT:
         tetris.movePieceRight()
         break
-      case KEYS.SPACE:
-        tetris.pushPiece()
-        break
     }
+  }
+
+  document.onkeyup = event => {
+    if (event.keyCode === KEYS.SPACE)
+      tetris.pushPiece()
   }
 }
