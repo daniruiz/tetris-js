@@ -113,7 +113,7 @@
           clearInterval(interval)
           setTimeout(() => { this.__lockPushPiece = false }, 250)
         }
-      }, 200)
+      }, 8)
     }
 
     movePieceDown () {
