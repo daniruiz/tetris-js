@@ -23,6 +23,7 @@
   },
   "standard": {
     "globals": [
+      "localStorage",
       "self",
       "Tetris",
       "TetrisBoard",

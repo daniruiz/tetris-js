@@ -35,10 +35,10 @@ window.onload = () => {
       id: 'scores',
       innerHTML: tetris.scores.reduce((code, { name, score }, i) => {
         const nameElement = Object.assign(document.createElement('SPAN'))
-        nameElement.innerText = `${i+1}. ${name}`
+        nameElement.innerText = `${i + 1}. ${name}`
         return code + `<div><span>${nameElement.outerHTML}</span><span>${score}</span></div>`
       }, '<span class="blinker">&lt;</span> <a href=".">RETURN</a><p>▓▓▒▒░░ SCORES ░░▒▒▓▓</p>')
-      }).outerHTML
+    }).outerHTML
   }
 
   const addButtonPressEvent = (element, action) => {

@@ -109,9 +109,9 @@
       this.__lockPushPiece = true
       setTimeout(() => { this.__lockPushPiece = false }, 500)
 
-      let interval = setInterval(() => {
+      const interval = setInterval(() => {
         this.movePieceDown() || clearInterval(interval)
-       }, 5)
+      }, 5)
     }
 
     movePieceDown () {
