@@ -67,7 +67,7 @@ window.onload = () => {
   addButtonPressEvent(document.getElementsByClassName('control--right')[0], () => tetris.movePieceRight())
   addButtonPressEvent(document.getElementsByClassName('control--down')[0], () => tetris.movePieceDown())
   addButtonPressEvent(document.getElementsByClassName('control--action')[0], () => tetris.rotatePiece())
-  document.getElementsByClassName('control--up')[0].onmousedown = () => tetris.pushPiece()
+  document.getElementsByClassName('control--up')[0].onmouseup = () => tetris.pushPiece()
 
   document.onkeydown = event => {
     switch (event.keyCode) {

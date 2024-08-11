@@ -107,7 +107,7 @@
       // Avoid button double click
       if (this.__lockPushPiece) return
       this.__lockPushPiece = true
-      setTimeout(() => this.__lockPushPiece = false, 250)
+      setTimeout(() => { this.__lockPushPiece = false }, 500)
 
       let interval = setInterval(() => {
         this.movePieceDown() || clearInterval(interval)
