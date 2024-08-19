@@ -229,6 +229,7 @@
         this.board[y].forEach(this._deleteVisualBlock)
         this.board.splice(y, 1)
         this.board.push(new Array(this.BOARD_SIZE.x))
+        navigator.vibrate(100)
       })
 
       const multiplier = val => val < 1 ? 0 : val + multiplier(val - 1)

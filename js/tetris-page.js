@@ -93,9 +93,7 @@ window.onload = () => {
   }
 
   document.onkeyup = event => {
-    if (event.keyCode === KEYS.SPACE) {
+    if (event.keyCode === KEYS.SPACE)
       tetris.pushPiece()
-      navigator.vibrate(20)
-    }
   }
 }
