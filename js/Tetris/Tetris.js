@@ -104,16 +104,12 @@
     }
 
     pushPiece () {
-      // Avoid button double click
-      if (this.__lockPushPiece) return
-      this.__lockPushPiece = true
-
       const interval = setInterval(() => {
-        if (!this.movePieceDown()) {
+        if (!this.movePieceDown() || this.__stopPushPiece) {
           clearInterval(interval)
-          setTimeout(() => { this.__lockPushPiece = false }, 250)
+          this.__stopPushPiece = false
         }
-      }, 8)
+      }, 5)
     }
 
     movePieceDown () {
@@ -125,6 +121,7 @@
       , false)
 
       if (addNewPiece) {
+        this.__stopPushPiece = true
         const currentPieceRow = this._currentPiece.reduce((maxY, block) => Math.max(block.y, maxY), 0)
         if (currentPieceRow >= this.BOARD_SIZE.y - 2) {
           this._gameOver()
