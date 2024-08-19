@@ -49,7 +49,10 @@ window.onload = () => {
       let interval
       const timeout = setTimeout(() => {
         document.getElementById('tetris').classList.add('key-press')
-        interval = setInterval(() => action(), 50)
+        interval = setInterval(() => {
+          action()
+          navigator.vibrate(20)
+        }, 50)
       }, 250)
       target.onmouseup = target.ontouchend = () => {
         document.getElementById('tetris').classList.remove('key-press')
@@ -87,7 +90,9 @@ window.onload = () => {
   }
 
   document.onkeyup = event => {
-    if (event.keyCode === KEYS.SPACE)
+    if (event.keyCode === KEYS.SPACE) {
       tetris.pushPiece()
+      navigator.vibrate(20)
+    }
   }
 }
