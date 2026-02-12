@@ -25,7 +25,7 @@
     this.boardElement.appendChild(block.element)
   }
 
-  _deleteVisualBlock ({ element }, i) { setTimeout(() => element.remove(), i * 10) }
+  _deleteVisualBlock ({ element }, i) { setTimeout(() => element.remove(), i * 18) }
 
   _updateVisualBoard (block, x, y) {
     const BOARD_SIZE = this.BOARD_SIZE
